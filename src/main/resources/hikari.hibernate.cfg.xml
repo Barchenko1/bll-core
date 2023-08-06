@@ -23,7 +23,44 @@
         <property name="hibernate.hikari.idleTimeout">300000</property>
         <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <!-- add annotated resources here -->
+        <mapping class="com.core.im.modal.order.Order" />
+        <mapping class="com.core.im.modal.order.OrderStatus" />
+        <mapping class="com.core.im.modal.order.OrderDetails" />
+        <mapping class="com.core.im.modal.order.OrderAddress" />
+        <mapping class="com.core.im.modal.order.OrderHistory" />
+
+        <mapping class="com.core.im.modal.user.UserRole" />
+        <mapping class="com.core.im.modal.user.UserDetails" />
+        <mapping class="com.core.im.modal.user.UserPayment" />
+        <mapping class="com.core.im.modal.user.UserAddress" />
+
+        <mapping class="com.core.im.modal.product.ProductType" />
+        <mapping class="com.core.im.modal.product.Discount" />
+        <mapping class="com.core.im.modal.product.Brand" />
+        <mapping class="com.core.im.modal.product.Category" />
+
+        <mapping class="com.core.im.modal.post.Comment" />
+        <mapping class="com.core.im.modal.post.Post" />
+
+        <mapping class="com.core.im.modal.shop.ShopAddress" />
+        <mapping class="com.core.im.modal.store.StoreAddress" />
+
+        <mapping class="com.core.im.modal.store.Store" />
+        <mapping class="com.core.im.modal.shop.Shop" />
+
+        <mapping class="com.core.im.modal.option.OptionGroup" />
+        <mapping class="com.core.im.modal.option.Option" />
+
+        <mapping class="com.core.im.modal.bucket.Bucket" />
+        <mapping class="com.core.im.modal.liked.Liked" />
+        <mapping class="com.core.im.modal.viewed.Viewed" />
+
+        <mapping class="com.core.im.modal.product.Product" />
+
         <mapping class="com.core.im.modal.user.AppUser" />
+
+        <mapping class="com.core.im.modal.review.Review" />
+        <mapping class="com.core.im.modal.product.Rating" />
 
     </session-factory>
 </hibernate-configuration>

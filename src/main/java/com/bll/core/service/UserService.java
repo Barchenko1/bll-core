@@ -7,21 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService<E> {
 
     private final SessionFactory sessionFactory;
-    private final IAppUserDao<AppUser> appUserDao;
+    private final IAppUserDao<E> appUserDao;
 
     @Autowired
-    public UserService(SessionFactory sessionFactory, IAppUserDao<AppUser> appUserDao) {
+    public UserService(SessionFactory sessionFactory, IAppUserDao<E> appUserDao) {
         this.sessionFactory = sessionFactory;
         this.appUserDao = appUserDao;
     }
 
 
-    public void toDo() {
-        sessionFactory.openSession();
-
-        System.out.println("todo");
+    public void addUser(E user) {
+        appUserDao.saveEntity(user);
     }
+
 }

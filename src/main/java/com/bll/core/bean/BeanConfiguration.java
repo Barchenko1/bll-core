@@ -88,12 +88,14 @@ import com.cos.core.dao.user.IUserDetailsDao;
 import com.cos.core.dao.user.IUserPaymentDao;
 import com.cos.core.dao.user.IUserRoleDao;
 import com.cos.core.dao.viewed.IViewedDao;
+import com.cos.core.dto.DefaultDtoEntityDao;
+import com.cos.core.dto.IDtoEntityDao;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class BeanConfig {
+public class BeanConfiguration {
 
     @Bean
     public SessionFactory sessionFactory() {
@@ -102,6 +104,14 @@ public class BeanConfig {
         );
         return configurationSessionFactory.getSessionFactory();
     }
+
+    //dto bean example
+//    @Bean
+//    public IDtoEntityDao dtoEntityDao(SessionFactory sessionFactory) {
+//        IDtoEntityDao dtoEntityDao = new DefaultDtoEntityDao(sessionFactory);
+//        dtoEntityDao.setClazz();
+//        return dtoEntityDao;
+//    }
 
     @Bean
     public IAppUserDao<AppUser> appUserDao(SessionFactory sessionFactory) {

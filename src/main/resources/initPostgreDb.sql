@@ -1,210 +1,581 @@
-CREATE TABLE IF NOT EXISTS user_role (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL
-);
 
-CREATE TABLE IF NOT EXISTS user_detail (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS user_address (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS user_payment (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS bucket (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS app_user (
-  id BIGINT PRIMARY KEY,
-  username VARCHAR(45) NOT NULL,
-  password VARCHAR(45) NOT NULL,
-  email VARCHAR(45) NOT NULL,
-  role_id BIGINT NOT NULL,
-  user_detail_id BIGINT NOT NULL,
-  user_address_id BIGINT NOT NULL,
-  user_payment_id BIGINT NOT NULL,
-  bucket_id BIGINT NOT NULL,
-  CONSTRAINT fk_user_role1 FOREIGN KEY (role_id) REFERENCES user_role (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_user_user_detail1 FOREIGN KEY (user_detail_id) REFERENCES user_detail (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_user_user_address1 FOREIGN KEY (user_address_id) REFERENCES user_address (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_user_user_payment1 FOREIGN KEY (user_payment_id) REFERENCES user_payment (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_user_bucket1 FOREIGN KEY (bucket_id) REFERENCES bucket (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS category (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS product_type (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS discount (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS brand (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS product (
-  id BIGINT PRIMARY KEY,
-  category_id BIGINT NOT NULL,
-  product_type_id BIGINT NOT NULL,
-  discount_id BIGINT NOT NULL,
-  brand_id BIGINT NOT NULL,
-  CONSTRAINT fk_product_category1 FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_product_type1 FOREIGN KEY (product_type_id) REFERENCES product_type (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_product_discount1 FOREIGN KEY (discount_id) REFERENCES discount (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_product_brand1 FOREIGN KEY (brand_id) REFERENCES brand (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS shop_address (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS shop (
-  id BIGINT PRIMARY KEY,
-  shop_address_id BIGINT NOT NULL,
-  CONSTRAINT fk_shop_shop_address1 FOREIGN KEY (shop_address_id) REFERENCES shop_address (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS liked (
-  id BIGINT PRIMARY KEY,
-  product_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  CONSTRAINT fk_liked_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_liked_user1 FOREIGN KEY (user_id) REFERENCES app_user (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS order_address (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS order_details (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS order_status (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS order_item (
-  id BIGINT PRIMARY KEY,
-  product_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  order_item_address_id BIGINT NOT NULL,
-  order_item_details_id BIGINT NOT NULL,
-  order_item_status_id BIGINT NOT NULL,
-  CONSTRAINT fk_order_item_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_order_user1 FOREIGN KEY (user_id) REFERENCES app_user (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_order_item_order_address1 FOREIGN KEY (order_item_address_id) REFERENCES order_address (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_order_order_details1 FOREIGN KEY (order_item_details_id) REFERENCES order_details (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_order_item_order_status1 FOREIGN KEY (order_item_status_id) REFERENCES order_status (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS store_address (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS store (
-  id BIGINT PRIMARY KEY,
-  store_address_id BIGINT NOT NULL,
-  CONSTRAINT fk_store_store_address1 FOREIGN KEY (store_address_id) REFERENCES store_address (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS store_has_shop (
-  store_id BIGINT NOT NULL,
-  shop_id BIGINT NOT NULL,
-  PRIMARY KEY (store_id, shop_id),
-  CONSTRAINT fk_store_has_shop_store1 FOREIGN KEY (store_id) REFERENCES store (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_store_has_shop_shop1 FOREIGN KEY (shop_id) REFERENCES shop (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS viewed (
-  id BIGINT PRIMARY KEY,
-  product_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  CONSTRAINT fk_viewed_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_viewed_user1 FOREIGN KEY (user_id) REFERENCES app_user (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS order_history (
-  id BIGINT PRIMARY KEY,
-  order_item_id BIGINT NOT NULL,
-  user_id BIGINT NOT NULL,
-  CONSTRAINT fk_order_item_history_order1 FOREIGN KEY (order_item_id) REFERENCES order_item (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_order_history_user1 FOREIGN KEY (user_id) REFERENCES app_user (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS bucket_has_product (
-  bucket_id BIGINT NOT NULL,
-  product_id BIGINT NOT NULL,
-  PRIMARY KEY (bucket_id, product_id),
-  CONSTRAINT fk_bucket_has_product_bucket1 FOREIGN KEY (bucket_id) REFERENCES bucket (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_bucket_has_product_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS option_group (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS option (
-  id BIGINT PRIMARY KEY,
-  name VARCHAR(45) NOT NULL,
-  option_group_id BIGINT NOT NULL,
-  CONSTRAINT fk_option_option_group1 FOREIGN KEY (option_group_id) REFERENCES option_group (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS product_option (
-  id BIGINT PRIMARY KEY,
-  option_id BIGINT NOT NULL,
-  product_id BIGINT NOT NULL,
-  CONSTRAINT fk_product_option_option1 FOREIGN KEY (option_id) REFERENCES option (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_product_option_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS post (
-  id BIGINT PRIMARY KEY,
-  product_id BIGINT NOT NULL,
-  CONSTRAINT fk_post_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS post_comment (
-  id BIGINT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS post_comment_has_post (
-  post_comment_id BIGINT NOT NULL,
-  post_id BIGINT NOT NULL,
-  PRIMARY KEY (post_comment_id, post_id),
-  CONSTRAINT fk_comment_has_post_comment1 FOREIGN KEY (post_comment_id) REFERENCES post_comment (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_comment_has_post_post1 FOREIGN KEY (post_id) REFERENCES post (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS store_has_product (
-  store_id BIGINT NOT NULL,
-  product_id BIGINT NOT NULL,
-  PRIMARY KEY (store_id, product_id),
-  CONSTRAINT fk_store_has_product_store1 FOREIGN KEY (store_id) REFERENCES store (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_store_has_product_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE IF NOT EXISTS shop_has_product (
-  shop_id BIGINT NOT NULL,
-  product_id BIGINT NOT NULL,
-  PRIMARY KEY (shop_id, product_id),
-  CONSTRAINT fk_shop_has_product_shop1 FOREIGN KEY (shop_id) REFERENCES shop (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT fk_shop_has_product_product1 FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
+    create table app_user (
+       id bigserial not null,
+        email varchar(255),
+        password varchar(255),
+        username varchar(255),
+        bucket_id bigint,
+        role_id bigint,
+        userAddress_id bigint,
+        userDetails_id bigint,
+        userPayment_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table brand (
+       id bigserial not null,
+        brand smallint,
+        primary key (id)
+    )
+ 
+    
+    create table bucket (
+       id bigserial not null,
+        user_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table bucket_has_product (
+       bucket_id bigint not null,
+        product_id bigint not null
+    )
+ 
+    
+    create table category (
+       id bigserial not null,
+        category smallint,
+        primary key (id)
+    )
+ 
+    
+    create table comment (
+       id bigserial not null,
+        authorEmail varchar(255),
+        authorName varchar(255),
+        message varchar(255),
+        post_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table discount (
+       id bigserial not null,
+        primary key (id)
+    )
+ 
+    
+    create table liked (
+       id bigserial not null,
+        product_id bigint,
+        user_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table option_group (
+       id bigserial not null,
+        optionsGroup smallint,
+        primary key (id)
+    )
+ 
+    
+    create table option_item (
+       id bigserial not null,
+        optionGroup_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table option_item_product (
+       Option_id bigint not null,
+        products_id bigint not null
+    )
+ 
+    
+    create table order_address (
+       id bigserial not null,
+        apartmentNumber integer not null,
+        building integer not null,
+        flor integer not null,
+        street varchar(255),
+        primary key (id)
+    )
+ 
+    
+    create table order_details (
+       id bigserial not null,
+        primary key (id)
+    )
+ 
+    
+    create table order_history (
+       id bigserial not null,
+        dataOfOrder timestamp(6),
+        order_id bigint,
+        user_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table order_item (
+       id bigserial not null,
+        orderAddress_id bigint,
+        orderDetails_id bigint,
+        orderStatus_id bigint,
+        product_id bigint,
+        user_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table order_status (
+       id bigserial not null,
+        orderStatus smallint,
+        primary key (id)
+    )
+ 
+    
+    create table post (
+       id bigserial not null,
+        authorEmail varchar(255),
+        authorName varchar(255),
+        message varchar(255),
+        primary key (id)
+    )
+ 
+    
+    create table post_comment (
+       Post_id bigint not null,
+        comments_id bigint not null
+    )
+ 
+    
+    create table product (
+       id bigserial not null,
+        productName varchar(255),
+        brand_id bigint,
+        category_id bigint,
+        discount_id bigint,
+        productType_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table product_option (
+       product_id bigint not null,
+        option_item_id bigint not null
+    )
+ 
+    
+    create table product_post (
+       Product_id bigint not null,
+        posts_id bigint not null
+    )
+ 
+    
+    create table product_review (
+       product_id bigint not null,
+        review_id bigint not null
+    )
+ 
+    
+    create table product_type (
+       id bigserial not null,
+        productType smallint,
+        primary key (id)
+    )
+ 
+    
+    create table rating (
+       id bigserial not null,
+        rating smallint,
+        primary key (id)
+    )
+ 
+    
+    create table review (
+       id bigserial not null,
+        advantage varchar(255),
+        flaw varchar(255),
+        postComment_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table review_rating (
+       review_id bigint not null,
+        rating_id bigint not null
+    )
+ 
+    
+    create table shop (
+       id bigserial not null,
+        shopAddress_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table shop_address (
+       id bigserial not null,
+        apartmentNumber integer not null,
+        building integer not null,
+        flor integer not null,
+        street varchar(255),
+        primary key (id)
+    )
+ 
+    
+    create table shop_product (
+       shop_id bigint not null,
+        product_id bigint not null
+    )
+ 
+    
+    create table store (
+       id bigserial not null,
+        storeAddress_id bigint,
+        primary key (id)
+    )
+ 
+    
+    create table store_address (
+       id bigserial not null,
+        apartmentNumber integer not null,
+        building integer not null,
+        flor integer not null,
+        street varchar(255),
+        primary key (id)
+    )
+ 
+    
+    create table store_product (
+       store_id bigint not null,
+        product_id bigint not null
+    )
+ 
+    
+    create table store_shop (
+       store_id bigint not null,
+        shop_id bigint not null
+    )
+ 
+    
+    create table user_address (
+       id bigserial not null,
+        apartmentNumber integer not null,
+        building integer not null,
+        flor integer not null,
+        street varchar(255),
+        primary key (id)
+    )
+ 
+    
+    create table user_details (
+       id bigserial not null,
+        primary key (id)
+    )
+ 
+    
+    create table user_payment (
+       id bigserial not null,
+        primary key (id)
+    )
+ 
+    
+    create table user_role (
+       id bigserial not null,
+        name smallint,
+        primary key (id)
+    )
+ 
+    
+    create table viewed (
+       id bigserial not null,
+        product_id bigint,
+        user_id bigint,
+        primary key (id)
+    )
+ 
+    
+    alter table if exists post_comment 
+       drop constraint if exists UK_se9l149iyyao6va95afioxsrl
+ 
+    
+    alter table if exists post_comment 
+       add constraint UK_se9l149iyyao6va95afioxsrl unique (comments_id)
+ 
+    
+    alter table if exists product_post 
+       drop constraint if exists UK_g7k13n5ppl87341qwxltt5mmg
+ 
+    
+    alter table if exists product_post 
+       add constraint UK_g7k13n5ppl87341qwxltt5mmg unique (posts_id)
+ 
+    
+    alter table if exists app_user 
+       add constraint FKjehcai3yacqcjtivt4c790xsh 
+       foreign key (bucket_id) 
+       references bucket
+ 
+    
+    alter table if exists app_user 
+       add constraint FKjsrnof3jy28c9eno19i04dxd5 
+       foreign key (role_id) 
+       references user_role
+ 
+    
+    alter table if exists app_user 
+       add constraint FKqmgtpbsha7mnfwhnt292kn10b 
+       foreign key (userAddress_id) 
+       references user_address
+ 
+    
+    alter table if exists app_user 
+       add constraint FKe0hdd0vdaii0ddb4e8e5of5xi 
+       foreign key (userDetails_id) 
+       references user_details
+ 
+    
+    alter table if exists app_user 
+       add constraint FK4cu3q31b3qginbrbw6tihpdp7 
+       foreign key (userPayment_id) 
+       references user_payment
+ 
+    
+    alter table if exists bucket 
+       add constraint FKni9q3au75tm8kke6xiwn03oed 
+       foreign key (user_id) 
+       references app_user
+ 
+    
+    alter table if exists bucket_has_product 
+       add constraint FKl4ibxcosh8uxp4q6tvownb0pi 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists bucket_has_product 
+       add constraint FKjnr92kq55cq1i3tcxkeypcd85 
+       foreign key (bucket_id) 
+       references bucket
+ 
+    
+    alter table if exists comment 
+       add constraint FKs1slvnkuemjsq2kj4h3vhx7i1 
+       foreign key (post_id) 
+       references post
+ 
+    
+    alter table if exists liked 
+       add constraint FK4ufc24y6gaa606e994oytt868 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists liked 
+       add constraint FKmmxj3qvngcm3anmmpu3aktevo 
+       foreign key (user_id) 
+       references app_user
+ 
+    
+    alter table if exists option_item 
+       add constraint FKi8a7hi02dpehhjq7c2qwh5sai 
+       foreign key (optionGroup_id) 
+       references option_group
+ 
+    
+    alter table if exists option_item_product 
+       add constraint FKi50w9lx80mdq85qvm0r5nrakj 
+       foreign key (products_id) 
+       references product
+ 
+    
+    alter table if exists option_item_product 
+       add constraint FK8iquwtarvhr1w8bib6wloe699 
+       foreign key (Option_id) 
+       references option_item
+ 
+    
+    alter table if exists order_history 
+       add constraint FKpnw8e9962yho1tmyd9e5dr0x6 
+       foreign key (order_id) 
+       references order_item
+ 
+    
+    alter table if exists order_history 
+       add constraint FK4ximere3hjjqduwoj7l8pbtuw 
+       foreign key (user_id) 
+       references app_user
+ 
+    
+    alter table if exists order_item 
+       add constraint FK4nrd5793tvanb3yqg9gv28yde 
+       foreign key (orderAddress_id) 
+       references order_address
+ 
+    
+    alter table if exists order_item 
+       add constraint FKs0ipkmy5qp5j4gklwimx4kb8u 
+       foreign key (orderDetails_id) 
+       references order_details
+ 
+    
+    alter table if exists order_item 
+       add constraint FKdaf9qb7qp4puef6sglu8us441 
+       foreign key (orderStatus_id) 
+       references order_status
+ 
+    
+    alter table if exists order_item 
+       add constraint FK551losx9j75ss5d6bfsqvijna 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists order_item 
+       add constraint FKcgs0relfw84njsvcj5rbp94n3 
+       foreign key (user_id) 
+       references app_user
+ 
+    
+    alter table if exists post_comment 
+       add constraint FKagqftk08s8sjuc6bbr9v99vbe 
+       foreign key (comments_id) 
+       references comment
+ 
+    
+    alter table if exists post_comment 
+       add constraint FKnm3lpb10fjje1itg5x6c7w7w4 
+       foreign key (Post_id) 
+       references post
+ 
+    
+    alter table if exists product 
+       add constraint FKs6cydsualtsrprvlf2bb3lcam 
+       foreign key (brand_id) 
+       references brand
+ 
+    
+    alter table if exists product 
+       add constraint FK1mtsbur82frn64de7balymq9s 
+       foreign key (category_id) 
+       references category
+ 
+    
+    alter table if exists product 
+       add constraint FKps2e0q9jpd0i9kj83je4rsmf1 
+       foreign key (discount_id) 
+       references discount
+ 
+    
+    alter table if exists product 
+       add constraint FKr85c7p8l1mscmgmpek6ur5nql 
+       foreign key (productType_id) 
+       references product_type
+ 
+    
+    alter table if exists product_option 
+       add constraint FKpuybkmydotfrlb904t6fevwmo 
+       foreign key (option_item_id) 
+       references option_item
+ 
+    
+    alter table if exists product_option 
+       add constraint FKn4hmm6ex1vgn60c6uiqte400f 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists product_post 
+       add constraint FKo7tiqdd9c7kk70x22i4gfquec 
+       foreign key (posts_id) 
+       references post
+ 
+    
+    alter table if exists product_post 
+       add constraint FKc1gc0qyxtd5mv44qb9ohmxhmj 
+       foreign key (Product_id) 
+       references product
+ 
+    
+    alter table if exists product_review 
+       add constraint FKedgxhnvlh3k85mq80smlpwdej 
+       foreign key (review_id) 
+       references review
+ 
+    
+    alter table if exists product_review 
+       add constraint FKkaqmhakwt05p3n0px81b9pdya 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists review 
+       add constraint FKlt2geq3kgswh80db4q6rxw6je 
+       foreign key (postComment_id) 
+       references comment
+ 
+    
+    alter table if exists review_rating 
+       add constraint FKfj1ya3a5vfomf4q2ggujvkbpb 
+       foreign key (rating_id) 
+       references rating
+ 
+    
+    alter table if exists review_rating 
+       add constraint FKh37ipkn319mk4u2v5w193jx81 
+       foreign key (review_id) 
+       references review
+ 
+    
+    alter table if exists shop 
+       add constraint FKpuckw89heucgdrk03r60hhira 
+       foreign key (shopAddress_id) 
+       references shop_address
+ 
+    
+    alter table if exists shop_product 
+       add constraint FKagx9ubmm4qiq1whqrf5f7wdc6 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists shop_product 
+       add constraint FK9n6cn7s1s7sdysss12k52v8sa 
+       foreign key (shop_id) 
+       references shop
+ 
+    
+    alter table if exists store 
+       add constraint FKaxmox3jfaoo9tosgh5eh2bvkp 
+       foreign key (storeAddress_id) 
+       references store_address
+ 
+    
+    alter table if exists store_product 
+       add constraint FKd91qk8cbmboomritdwn351tak 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists store_product 
+       add constraint FKdncsr7lgl9pdsq71314etuwrp 
+       foreign key (store_id) 
+       references store
+ 
+    
+    alter table if exists store_shop 
+       add constraint FKphg6q3idmg7752twftyi4mf26 
+       foreign key (shop_id) 
+       references shop
+ 
+    
+    alter table if exists store_shop 
+       add constraint FKhsx2ivwxjwyd13iuluortvmo0 
+       foreign key (store_id) 
+       references store
+ 
+    
+    alter table if exists viewed 
+       add constraint FKn6bvw5lkecdsdl1k2wo33u03u 
+       foreign key (product_id) 
+       references product
+ 
+    
+    alter table if exists viewed 
+       add constraint FK1nk5ghafyfbi5n4e1ildf2ykt 
+       foreign key (user_id) 
+       references app_user

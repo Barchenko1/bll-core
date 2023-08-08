@@ -32,12 +32,6 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
@@ -52,6 +46,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.database-rider</groupId>
+            <artifactId>rider-junit5</artifactId>
+            <version>${rider.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -77,9 +78,9 @@
         <spring.version>6.0.11</spring.version>
         <log.version>2.18.0</log.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <junit.jupiter.version>5.9.0</junit.jupiter.version>
-        <junit.platform.version>1.9.0</junit.platform.version>
-        <junit.platform.version>1.9.0-M1</junit.platform.version>
+        <rider.version>1.39.0</rider.version>
+        <junit.jupiter.version>5.10.0</junit.jupiter.version>
+        <junit.platform.version>1.10.0</junit.platform.version>
         <compile.plugin.version>3.10.1</compile.plugin.version>
         <surefire.plugin.version>2.22.2</surefire.plugin.version>
         <failsafe.plugin.version>3.0.0-M7</failsafe.plugin.version>

@@ -22,6 +22,7 @@ import com.cos.core.dao.product.*;
 import com.cos.core.dao.user.*;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,7 +33,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.List;
 
 @ExtendWith(DBUnitExtension.class)
-public class BeanTest extends AbstractBeanTest {
+public class CreateBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
 
     @BeforeAll
@@ -113,6 +114,7 @@ public class BeanTest extends AbstractBeanTest {
     //product beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/product/createExpectedCategorySet.xml")
     void categoryDaoBeanTest() {
         ICategoryDao<Category> categoryDao = context.getBean(ICategoryDao.class);
         Category category = new Category();
@@ -126,6 +128,7 @@ public class BeanTest extends AbstractBeanTest {
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/product/createExpectedBrandSet.xml")
     void brandDaoBeanTest() {
         IBrandDao<Brand> brandDao = context.getBean(IBrandDao.class);
         Brand brand = new Brand();
@@ -139,6 +142,7 @@ public class BeanTest extends AbstractBeanTest {
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+//    @ExpectedDataSet("/data/expected/create/product/createExpectedBrandSet.xml")
     void discountDaoBeanTest() {
         IDiscountDao<Discount> discountDao = context.getBean(IDiscountDao.class);
         Discount discount = new Discount();
@@ -150,6 +154,7 @@ public class BeanTest extends AbstractBeanTest {
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/product/createExpectedProductTypeSet.xml")
     void productTypeDaoBeanTest() {
         IProductTypeDao<ProductType> productTypeDao = context.getBean(IProductTypeDao.class);
         ProductType productType = new ProductType();
@@ -164,6 +169,7 @@ public class BeanTest extends AbstractBeanTest {
     //order beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderAddressSet.xml")
     void orderAddressDaoBeanTest() {
         IOrderAddressDao<OrderAddress> orderAddressDao = context.getBean(IOrderAddressDao.class);
         OrderAddress orderAddress = new OrderAddress();
@@ -181,6 +187,7 @@ public class BeanTest extends AbstractBeanTest {
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+//    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderDetailSet.xml")
     void orderDetailsDaoBeanTest() {
         IOrderDetailDao<OrderDetail> orderDetailDao = context.getBean(IOrderDetailDao.class);
         OrderDetail orderDetail = new OrderDetail();
@@ -193,17 +200,19 @@ public class BeanTest extends AbstractBeanTest {
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderStatusSet.xml")
     void orderStatusDaoBeanTest() {
         IOrderStatusDao<OrderStatus> orderStatusDao = context.getBean(IOrderStatusDao.class);
         OrderStatus status = new OrderStatus();
         status.setStatus(OrderStatusEnum.NEW);
         orderStatusDao.saveEntity(status);
         List<OrderStatus> orderStatusList =
-                orderStatusDao.getEntityListBySQLQuery("select * from order_status d;");
+                orderStatusDao.getEntityListBySQLQuery("select * from order_status o;");
         Assertions.assertFalse(orderStatusList.isEmpty());
         Assertions.assertEquals(OrderStatusEnum.NEW, orderStatusList.get(0).getStatus());
 
     }
+
     //to do
 //    @Test
 //    @DataSet(cleanBefore = true, cleanAfter = true)
@@ -221,9 +230,10 @@ public class BeanTest extends AbstractBeanTest {
 //    void orderHistoryDaoBeanTest() {
 //        IOrderHistoryDao<OrderHistory> orderHistoryDao = context.getBean(IOrderHistoryDao.class);
 //        OrderHistory orderHistory = new OrderHistory();
-//        orderHistory.set
+//        orderHistory.setDataOfOrder(System.currentTimeMillis());
 //        orderHistoryDao.saveEntity(orderHistory);
-//        List<OrderHistory> productTypeList = orderHistoryDao.getEntityListBySQLQuery("select * from product_type p;");
+//        List<OrderHistory> productTypeList =
+//                orderHistoryDao.getEntityListBySQLQuery("select * from order_history o;");
 //        Assertions.assertFalse(productTypeList.isEmpty());
 //
 //    }

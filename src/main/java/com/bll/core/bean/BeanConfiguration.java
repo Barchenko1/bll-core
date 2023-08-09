@@ -4,10 +4,10 @@ import com.core.im.modal.bucket.Bucket;
 import com.core.im.modal.liked.Liked;
 import com.core.im.modal.option.Option;
 import com.core.im.modal.option.OptionGroup;
-import com.core.im.modal.order.Order;
 import com.core.im.modal.order.OrderAddress;
-import com.core.im.modal.order.OrderDetails;
+import com.core.im.modal.order.OrderDetail;
 import com.core.im.modal.order.OrderHistory;
+import com.core.im.modal.order.OrderItem;
 import com.core.im.modal.order.OrderStatus;
 import com.core.im.modal.post.Comment;
 import com.core.im.modal.post.Post;
@@ -43,9 +43,9 @@ import com.cos.core.dao.impl.BasicLikedDao;
 import com.cos.core.dao.impl.BasicOptionDao;
 import com.cos.core.dao.impl.BasicOptionGroupDao;
 import com.cos.core.dao.impl.BasicOrderAddressDao;
-import com.cos.core.dao.impl.BasicOrderDao;
-import com.cos.core.dao.impl.BasicOrderDetailsDao;
+import com.cos.core.dao.impl.BasicOrderDetailDao;
 import com.cos.core.dao.impl.BasicOrderHistoryDao;
+import com.cos.core.dao.impl.BasicOrderItemDao;
 import com.cos.core.dao.impl.BasicOrderStatusDao;
 import com.cos.core.dao.impl.BasicPostDao;
 import com.cos.core.dao.impl.BasicProductDao;
@@ -65,9 +65,9 @@ import com.cos.core.dao.liked.ILikedDao;
 import com.cos.core.dao.option.IOptionDao;
 import com.cos.core.dao.option.IOptionGroupDao;
 import com.cos.core.dao.order.IOrderAddressDao;
-import com.cos.core.dao.order.IOrderDao;
-import com.cos.core.dao.order.IOrderDetailsDao;
+import com.cos.core.dao.order.IOrderDetailDao;
 import com.cos.core.dao.order.IOrderHistoryDao;
+import com.cos.core.dao.order.IOrderItemDao;
 import com.cos.core.dao.order.IOrderStatusDao;
 import com.cos.core.dao.post.ICommentDao;
 import com.cos.core.dao.post.IPostDao;
@@ -147,10 +147,10 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IOrderDao<Order> orderDao(SessionFactory sessionFactory) {
-        IOrderDao<Order> orderDao = new BasicOrderDao<>(sessionFactory);
-        orderDao.setClazz(Order.class);
-        return orderDao;
+    public IOrderItemDao<OrderItem> orderItemDao(SessionFactory sessionFactory) {
+        IOrderItemDao<OrderItem> orderItemDao = new BasicOrderItemDao<>(sessionFactory);
+        orderItemDao.setClazz(OrderItem.class);
+        return orderItemDao;
     }
 
     @Bean
@@ -161,10 +161,10 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IOrderDetailsDao<OrderDetails> orderDetailsDao(SessionFactory sessionFactory) {
-        IOrderDetailsDao<OrderDetails> orderDetailsDao = new BasicOrderDetailsDao<>(sessionFactory);
-        orderDetailsDao.setClazz(OrderDetails.class);
-        return orderDetailsDao;
+    public IOrderDetailDao<OrderDetail> orderDetailDao(SessionFactory sessionFactory) {
+        IOrderDetailDao<OrderDetail> orderDetailDao = new BasicOrderDetailDao<>(sessionFactory);
+        orderDetailDao.setClazz(OrderDetail.class);
+        return orderDetailDao;
     }
 
     @Bean

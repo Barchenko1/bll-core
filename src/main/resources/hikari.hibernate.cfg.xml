@@ -23,9 +23,9 @@
         <property name="hibernate.hikari.idleTimeout">300000</property>
         <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <!-- add annotated resources here -->
-        <mapping class="com.core.im.modal.order.Order" />
+        <mapping class="com.core.im.modal.order.OrderItem" />
         <mapping class="com.core.im.modal.order.OrderStatus" />
-        <mapping class="com.core.im.modal.order.OrderDetails" />
+        <mapping class="com.core.im.modal.order.OrderDetail" />
         <mapping class="com.core.im.modal.order.OrderAddress" />
         <mapping class="com.core.im.modal.order.OrderHistory" />
 

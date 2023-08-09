@@ -3,8 +3,12 @@ package com.bll.core.test;
 import com.bll.core.bean.BeanConfiguration;
 import com.core.im.constant.BrandEnum;
 import com.core.im.constant.CategoryEnum;
+import com.core.im.constant.OrderStatusEnum;
 import com.core.im.constant.ProductTypeEnum;
 import com.core.im.constant.RoleEnum;
+import com.core.im.modal.order.OrderAddress;
+import com.core.im.modal.order.OrderDetail;
+import com.core.im.modal.order.OrderStatus;
 import com.core.im.modal.product.Brand;
 import com.core.im.modal.product.Category;
 import com.core.im.modal.product.Discount;
@@ -13,6 +17,7 @@ import com.core.im.modal.user.*;
 import com.cos.core.config.ConfigDbType;
 import com.cos.core.config.ConnectionPoolType;
 import com.cos.core.config.factory.ConfigurationSessionFactory;
+import com.cos.core.dao.order.*;
 import com.cos.core.dao.product.*;
 import com.cos.core.dao.user.*;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
@@ -51,6 +56,7 @@ public class BeanTest extends AbstractBeanTest {
         Assertions.assertTrue(appUserList.isEmpty());
     }
 
+    //user beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
     void userRoleDaoBeanTest() {
@@ -64,7 +70,6 @@ public class BeanTest extends AbstractBeanTest {
 
     }
 
-    //user beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
     void userPaymentDaoBeanTest() {
@@ -105,7 +110,7 @@ public class BeanTest extends AbstractBeanTest {
 
     }
 
-    //category
+    //product beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
     void categoryDaoBeanTest() {
@@ -155,4 +160,71 @@ public class BeanTest extends AbstractBeanTest {
         Assertions.assertEquals(ProductTypeEnum.CLAUSE.getValue(), productTypeList.get(0).getName());
 
     }
+
+    //order beans
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    void orderAddressDaoBeanTest() {
+        IOrderAddressDao<OrderAddress> orderAddressDao = context.getBean(IOrderAddressDao.class);
+        OrderAddress orderAddress = new OrderAddress();
+        orderAddress.setApartmentNumber(1);
+        orderAddress.setBuilding(1);
+        orderAddress.setFlor(1);
+        orderAddress.setStreet("Some street");
+        orderAddressDao.saveEntity(orderAddress);
+        List<OrderAddress> orderAddressList =
+                orderAddressDao.getEntityListBySQLQuery("select * from order_address a;");
+        Assertions.assertFalse(orderAddressList.isEmpty());
+        Assertions.assertEquals("Some street", orderAddressList.get(0).getStreet());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    void orderDetailsDaoBeanTest() {
+        IOrderDetailDao<OrderDetail> orderDetailDao = context.getBean(IOrderDetailDao.class);
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetailDao.saveEntity(orderDetail);
+        List<OrderDetail> orderDetailList =
+                orderDetailDao.getEntityListBySQLQuery("select * from order_detail o;");
+        Assertions.assertFalse(orderDetailList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    void orderStatusDaoBeanTest() {
+        IOrderStatusDao<OrderStatus> orderStatusDao = context.getBean(IOrderStatusDao.class);
+        OrderStatus status = new OrderStatus();
+        status.setStatus(OrderStatusEnum.NEW);
+        orderStatusDao.saveEntity(status);
+        List<OrderStatus> orderStatusList =
+                orderStatusDao.getEntityListBySQLQuery("select * from order_status d;");
+        Assertions.assertFalse(orderStatusList.isEmpty());
+        Assertions.assertEquals(OrderStatusEnum.NEW, orderStatusList.get(0).getStatus());
+
+    }
+    //to do
+//    @Test
+//    @DataSet(cleanBefore = true, cleanAfter = true)
+//    void orderItemDaoBeanTest() {
+//        IOrderDao<OrderItem> orderDao = context.getBean(IOrderDao.class);
+//        OrderItem orderItem = new OrderItem();
+//        orderDao.saveEntity(orderItem);
+//        List<OrderItem> orderItemList = orderDao.getEntityListBySQLQuery("select * from order_item o;");
+//        Assertions.assertFalse(orderItemList.isEmpty());
+//
+//    }
+
+//    @Test
+//    @DataSet(cleanBefore = true, cleanAfter = true)
+//    void orderHistoryDaoBeanTest() {
+//        IOrderHistoryDao<OrderHistory> orderHistoryDao = context.getBean(IOrderHistoryDao.class);
+//        OrderHistory orderHistory = new OrderHistory();
+//        orderHistory.set
+//        orderHistoryDao.saveEntity(orderHistory);
+//        List<OrderHistory> productTypeList = orderHistoryDao.getEntityListBySQLQuery("select * from product_type p;");
+//        Assertions.assertFalse(productTypeList.isEmpty());
+//
+//    }
 }

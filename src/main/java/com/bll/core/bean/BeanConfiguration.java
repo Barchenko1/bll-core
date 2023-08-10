@@ -11,12 +11,7 @@ import com.core.im.modal.order.OrderItem;
 import com.core.im.modal.order.OrderStatus;
 import com.core.im.modal.post.Comment;
 import com.core.im.modal.post.Post;
-import com.core.im.modal.product.Brand;
-import com.core.im.modal.product.Category;
-import com.core.im.modal.product.Discount;
-import com.core.im.modal.product.Product;
-import com.core.im.modal.product.ProductType;
-import com.core.im.modal.product.Rating;
+import com.core.im.modal.product.*;
 import com.core.im.modal.review.Review;
 import com.core.im.modal.shop.Shop;
 import com.core.im.modal.shop.ShopAddress;
@@ -24,7 +19,7 @@ import com.core.im.modal.store.Store;
 import com.core.im.modal.store.StoreAddress;
 import com.core.im.modal.user.AppUser;
 import com.core.im.modal.user.UserAddress;
-import com.core.im.modal.user.UserDetails;
+import com.core.im.modal.user.UserDetail;
 import com.core.im.modal.user.UserPayment;
 import com.core.im.modal.user.UserRole;
 import com.core.im.modal.viewed.Viewed;
@@ -32,35 +27,8 @@ import com.cos.core.config.ConfigDbType;
 import com.cos.core.config.ConnectionPoolType;
 import com.cos.core.config.factory.ConfigurationSessionFactory;
 import com.cos.core.config.factory.IConfigurationSessionFactory;
+import com.cos.core.dao.basic.*;
 import com.cos.core.dao.bucket.IBucketDao;
-import com.cos.core.dao.impl.BasicAppUserDao;
-import com.cos.core.dao.impl.BasicBrandDao;
-import com.cos.core.dao.impl.BasicBucketDao;
-import com.cos.core.dao.impl.BasicCategoryDao;
-import com.cos.core.dao.impl.BasicCommentDao;
-import com.cos.core.dao.impl.BasicDiscountDao;
-import com.cos.core.dao.impl.BasicLikedDao;
-import com.cos.core.dao.impl.BasicOptionDao;
-import com.cos.core.dao.impl.BasicOptionGroupDao;
-import com.cos.core.dao.impl.BasicOrderAddressDao;
-import com.cos.core.dao.impl.BasicOrderDetailDao;
-import com.cos.core.dao.impl.BasicOrderHistoryDao;
-import com.cos.core.dao.impl.BasicOrderItemDao;
-import com.cos.core.dao.impl.BasicOrderStatusDao;
-import com.cos.core.dao.impl.BasicPostDao;
-import com.cos.core.dao.impl.BasicProductDao;
-import com.cos.core.dao.impl.BasicProductTypeDao;
-import com.cos.core.dao.impl.BasicRatingDao;
-import com.cos.core.dao.impl.BasicReviewDao;
-import com.cos.core.dao.impl.BasicShopAddressDao;
-import com.cos.core.dao.impl.BasicShopDao;
-import com.cos.core.dao.impl.BasicStoreAddressDao;
-import com.cos.core.dao.impl.BasicStoreDao;
-import com.cos.core.dao.impl.BasicUserAddressDao;
-import com.cos.core.dao.impl.BasicUserDetailsDao;
-import com.cos.core.dao.impl.BasicUserPaymentDao;
-import com.cos.core.dao.impl.BasicUserRoleDao;
-import com.cos.core.dao.impl.BasicViewedDao;
 import com.cos.core.dao.liked.ILikedDao;
 import com.cos.core.dao.option.IOptionDao;
 import com.cos.core.dao.option.IOptionGroupDao;
@@ -71,11 +39,7 @@ import com.cos.core.dao.order.IOrderItemDao;
 import com.cos.core.dao.order.IOrderStatusDao;
 import com.cos.core.dao.post.ICommentDao;
 import com.cos.core.dao.post.IPostDao;
-import com.cos.core.dao.product.IBrandDao;
-import com.cos.core.dao.product.ICategoryDao;
-import com.cos.core.dao.product.IDiscountDao;
-import com.cos.core.dao.product.IProductDao;
-import com.cos.core.dao.product.IProductTypeDao;
+import com.cos.core.dao.product.*;
 import com.cos.core.dao.rating.IRatingDao;
 import com.cos.core.dao.review.IReviewDao;
 import com.cos.core.dao.shop.IShopAddressDao;
@@ -84,7 +48,7 @@ import com.cos.core.dao.store.IStoreAddressDao;
 import com.cos.core.dao.store.IStoreDao;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.dao.user.IUserAddressDao;
-import com.cos.core.dao.user.IUserDetailsDao;
+import com.cos.core.dao.user.IUserDetailDao;
 import com.cos.core.dao.user.IUserPaymentDao;
 import com.cos.core.dao.user.IUserRoleDao;
 import com.cos.core.dao.viewed.IViewedDao;
@@ -126,9 +90,9 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IUserDetailsDao<UserDetails> userDetailsDao(SessionFactory sessionFactory) {
-        IUserDetailsDao<UserDetails> userDetailsDao = new BasicUserDetailsDao<>(sessionFactory);
-        userDetailsDao.setClazz(UserDetails.class);
+    public IUserDetailDao<UserDetail> userDetailsDao(SessionFactory sessionFactory) {
+        IUserDetailDao<UserDetail> userDetailsDao = new BasicUserDetailDao<>(sessionFactory);
+        userDetailsDao.setClazz(UserDetail.class);
         return userDetailsDao;
     }
 
@@ -207,6 +171,13 @@ public class BeanConfiguration {
         ICategoryDao<Category> categoryDao = new BasicCategoryDao<>(sessionFactory);
         categoryDao.setClazz(Category.class);
         return categoryDao;
+    }
+
+    @Bean
+    public IProductStatusDao<ProductStatus> productStatusDao(SessionFactory sessionFactory) {
+        IProductStatusDao<ProductStatus> productStatusDao = new BasicProductStatusDao<>(sessionFactory);
+        productStatusDao.setClazz(ProductStatus.class);
+        return productStatusDao;
     }
 
     @Bean

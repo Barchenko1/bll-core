@@ -1,4 +1,4 @@
-package com.bll.core.test;
+package com.bll.core.bean;
 
 import com.bll.core.util.TestUtil;
 import com.zaxxer.hikari.HikariDataSource;

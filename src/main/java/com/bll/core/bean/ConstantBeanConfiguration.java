@@ -51,7 +51,7 @@ public class ConstantBeanConfiguration {
     @Bean
     public Map<Integer, Rating> ratingMap(IRatingDao<Rating> ratingDao) {
         return ratingDao.getEntityListBySQLQuery("SELECT * FROM rating r").stream()
-                .collect(Collectors.toMap(Rating::getValue, rating -> rating, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(Rating::getRatingValue, rating -> rating, (existing, replacement) -> existing));
     }
 
     @Bean

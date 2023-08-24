@@ -13,12 +13,11 @@ import com.core.im.tenant.modal.product.Category;
 import com.core.im.tenant.modal.product.ProductStatus;
 import com.core.im.tenant.modal.product.ProductType;
 import com.core.im.tenant.modal.product.Rating;
-import com.cos.core.config.ConnectionPoolType;
-import com.cos.core.config.factory.ConfigurationSessionFactory;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
 import org.dbunit.operation.DatabaseOperation;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,10 +33,6 @@ public class ConstantBeanTest extends AbstractBeanTest {
 
     @BeforeAll
     public static void getSessionFactory() {
-        ConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
-                ConnectionPoolType.HIKARI
-        );
-        sessionFactory = configurationSessionFactory.getSessionFactory();
         dataSource = getHikariDataSource();
         connectionHolder = dataSource::getConnection;
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initCategoryDataSet.xml");
@@ -46,7 +41,9 @@ public class ConstantBeanTest extends AbstractBeanTest {
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initBrandDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initRatingDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initProductStatusDataSet.xml");
+
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class, ConstantBeanConfiguration.class);
+        sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
     }
 
     @Test

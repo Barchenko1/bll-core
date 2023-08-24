@@ -21,8 +21,6 @@ import com.core.im.tenant.modal.user.UserAddress;
 import com.core.im.tenant.modal.user.UserDetail;
 import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
-import com.cos.core.config.ConnectionPoolType;
-import com.cos.core.config.factory.ConfigurationSessionFactory;
 import com.cos.core.dao.order.IOrderAddressDao;
 import com.cos.core.dao.order.IOrderDetailDao;
 import com.cos.core.dao.order.IOrderStatusDao;
@@ -40,6 +38,7 @@ import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -54,14 +53,12 @@ public class CreateBeanTest extends AbstractBeanTest {
 
     @BeforeAll
     public static void getSessionFactory() {
-        ConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
-                ConnectionPoolType.HIKARI
-        );
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class);
-        sessionFactory = configurationSessionFactory.getSessionFactory();
+        sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
         dataSource = getHikariDataSource();
         connectionHolder = dataSource::getConnection;
     }
+
     //user beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)

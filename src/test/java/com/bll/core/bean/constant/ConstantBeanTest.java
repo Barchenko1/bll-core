@@ -4,16 +4,15 @@ import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
 import com.bll.core.bean.ConstantBeanConfiguration;
 import com.bll.core.util.TestUtil;
-import com.core.im.constant.OrderStatusEnum;
-import com.core.im.constant.ProductStatusEnum;
-import com.core.im.constant.RateEnum;
-import com.core.im.modal.order.OrderStatus;
-import com.core.im.modal.product.Brand;
-import com.core.im.modal.product.Category;
-import com.core.im.modal.product.ProductStatus;
-import com.core.im.modal.product.ProductType;
-import com.core.im.modal.product.Rating;
-import com.cos.core.config.ConfigDbType;
+import com.core.im.tenant.constant.OrderStatusEnum;
+import com.core.im.tenant.constant.ProductStatusEnum;
+import com.core.im.tenant.constant.RateEnum;
+import com.core.im.tenant.modal.order.OrderStatus;
+import com.core.im.tenant.modal.product.Brand;
+import com.core.im.tenant.modal.product.Category;
+import com.core.im.tenant.modal.product.ProductStatus;
+import com.core.im.tenant.modal.product.ProductType;
+import com.core.im.tenant.modal.product.Rating;
 import com.cos.core.config.ConnectionPoolType;
 import com.cos.core.config.factory.ConfigurationSessionFactory;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
@@ -36,7 +35,7 @@ public class ConstantBeanTest extends AbstractBeanTest {
     @BeforeAll
     public static void getSessionFactory() {
         ConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
-                ConnectionPoolType.HIKARI, ConfigDbType.XML
+                ConnectionPoolType.HIKARI
         );
         sessionFactory = configurationSessionFactory.getSessionFactory();
         dataSource = getHikariDataSource();

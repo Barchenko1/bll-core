@@ -1,13 +1,13 @@
 package com.bll.core.bean;
 
-import com.core.im.constant.OrderStatusEnum;
-import com.core.im.constant.ProductStatusEnum;
-import com.core.im.modal.order.OrderStatus;
-import com.core.im.modal.product.Brand;
-import com.core.im.modal.product.Category;
-import com.core.im.modal.product.ProductStatus;
-import com.core.im.modal.product.ProductType;
-import com.core.im.modal.product.Rating;
+import com.core.im.tenant.constant.OrderStatusEnum;
+import com.core.im.tenant.constant.ProductStatusEnum;
+import com.core.im.tenant.modal.order.OrderStatus;
+import com.core.im.tenant.modal.product.Brand;
+import com.core.im.tenant.modal.product.Category;
+import com.core.im.tenant.modal.product.ProductStatus;
+import com.core.im.tenant.modal.product.ProductType;
+import com.core.im.tenant.modal.product.Rating;
 import com.cos.core.dao.order.IOrderStatusDao;
 import com.cos.core.dao.product.IBrandDao;
 import com.cos.core.dao.product.ICategoryDao;
@@ -51,7 +51,7 @@ public class ConstantBeanConfiguration {
     @Bean
     public Map<Integer, Rating> ratingMap(IRatingDao<Rating> ratingDao) {
         return ratingDao.getEntityListBySQLQuery("SELECT * FROM rating r").stream()
-                .collect(Collectors.toMap(Rating::getRatingValue, rating -> rating, (existing, replacement) -> existing));
+                .collect(Collectors.toMap(Rating::getValue, rating -> rating, (existing, replacement) -> existing));
     }
 
     @Bean

@@ -1,6 +1,6 @@
 package com.bll.core.service;
 
-import com.core.im.modal.user.AppUser;
+import com.core.im.tenant.modal.user.AppUser;
 import com.cos.core.dao.user.IAppUserDao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

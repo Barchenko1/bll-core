@@ -2,26 +2,25 @@ package com.bll.core.bean.create;
 
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
-import com.core.im.constant.BrandEnum;
-import com.core.im.constant.CategoryEnum;
-import com.core.im.constant.OrderStatusEnum;
-import com.core.im.constant.ProductStatusEnum;
-import com.core.im.constant.ProductTypeEnum;
-import com.core.im.constant.RoleEnum;
-import com.core.im.modal.order.OrderAddress;
-import com.core.im.modal.order.OrderDetail;
-import com.core.im.modal.order.OrderStatus;
-import com.core.im.modal.product.Brand;
-import com.core.im.modal.product.Category;
-import com.core.im.modal.product.Discount;
-import com.core.im.modal.product.ProductStatus;
-import com.core.im.modal.product.ProductType;
-import com.core.im.modal.user.AppUser;
-import com.core.im.modal.user.UserAddress;
-import com.core.im.modal.user.UserDetail;
-import com.core.im.modal.user.UserPayment;
-import com.core.im.modal.user.UserRole;
-import com.cos.core.config.ConfigDbType;
+import com.core.im.tenant.constant.BrandEnum;
+import com.core.im.tenant.constant.CategoryEnum;
+import com.core.im.tenant.constant.OrderStatusEnum;
+import com.core.im.tenant.constant.ProductStatusEnum;
+import com.core.im.tenant.constant.ProductTypeEnum;
+import com.core.im.tenant.constant.RoleEnum;
+import com.core.im.tenant.modal.order.OrderAddress;
+import com.core.im.tenant.modal.order.OrderDetail;
+import com.core.im.tenant.modal.order.OrderStatus;
+import com.core.im.tenant.modal.product.Brand;
+import com.core.im.tenant.modal.product.Category;
+import com.core.im.tenant.modal.product.Discount;
+import com.core.im.tenant.modal.product.ProductStatus;
+import com.core.im.tenant.modal.product.ProductType;
+import com.core.im.tenant.modal.user.AppUser;
+import com.core.im.tenant.modal.user.UserAddress;
+import com.core.im.tenant.modal.user.UserDetail;
+import com.core.im.tenant.modal.user.UserPayment;
+import com.core.im.tenant.modal.user.UserRole;
 import com.cos.core.config.ConnectionPoolType;
 import com.cos.core.config.factory.ConfigurationSessionFactory;
 import com.cos.core.dao.order.IOrderAddressDao;
@@ -56,7 +55,7 @@ public class CreateBeanTest extends AbstractBeanTest {
     @BeforeAll
     public static void getSessionFactory() {
         ConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
-                ConnectionPoolType.HIKARI, ConfigDbType.XML
+                ConnectionPoolType.HIKARI
         );
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class);
         sessionFactory = configurationSessionFactory.getSessionFactory();

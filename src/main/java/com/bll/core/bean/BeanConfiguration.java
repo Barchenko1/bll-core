@@ -1,35 +1,34 @@
 package com.bll.core.bean;
 
-import com.core.im.modal.bucket.Bucket;
-import com.core.im.modal.liked.Liked;
-import com.core.im.modal.option.Option;
-import com.core.im.modal.option.OptionGroup;
-import com.core.im.modal.order.OrderAddress;
-import com.core.im.modal.order.OrderDetail;
-import com.core.im.modal.order.OrderHistory;
-import com.core.im.modal.order.OrderItem;
-import com.core.im.modal.order.OrderStatus;
-import com.core.im.modal.post.Comment;
-import com.core.im.modal.post.Post;
-import com.core.im.modal.product.Brand;
-import com.core.im.modal.product.Category;
-import com.core.im.modal.product.Discount;
-import com.core.im.modal.product.Product;
-import com.core.im.modal.product.ProductStatus;
-import com.core.im.modal.product.ProductType;
-import com.core.im.modal.product.Rating;
-import com.core.im.modal.review.Review;
-import com.core.im.modal.shop.Shop;
-import com.core.im.modal.shop.ShopAddress;
-import com.core.im.modal.store.Store;
-import com.core.im.modal.store.StoreAddress;
-import com.core.im.modal.user.AppUser;
-import com.core.im.modal.user.UserAddress;
-import com.core.im.modal.user.UserDetail;
-import com.core.im.modal.user.UserPayment;
-import com.core.im.modal.user.UserRole;
-import com.core.im.modal.viewed.Viewed;
-import com.cos.core.config.ConfigDbType;
+import com.core.im.tenant.modal.bucket.Bucket;
+import com.core.im.tenant.modal.liked.Liked;
+import com.core.im.tenant.modal.option.Option;
+import com.core.im.tenant.modal.option.OptionGroup;
+import com.core.im.tenant.modal.order.OrderAddress;
+import com.core.im.tenant.modal.order.OrderDetail;
+import com.core.im.tenant.modal.order.OrderHistory;
+import com.core.im.tenant.modal.order.OrderItem;
+import com.core.im.tenant.modal.order.OrderStatus;
+import com.core.im.tenant.modal.post.Comment;
+import com.core.im.tenant.modal.post.Post;
+import com.core.im.tenant.modal.product.Brand;
+import com.core.im.tenant.modal.product.Category;
+import com.core.im.tenant.modal.product.Discount;
+import com.core.im.tenant.modal.product.Product;
+import com.core.im.tenant.modal.product.ProductStatus;
+import com.core.im.tenant.modal.product.ProductType;
+import com.core.im.tenant.modal.product.Rating;
+import com.core.im.tenant.modal.review.Review;
+import com.core.im.tenant.modal.shop.Shop;
+import com.core.im.tenant.modal.shop.ShopAddress;
+import com.core.im.tenant.modal.store.Store;
+import com.core.im.tenant.modal.store.StoreAddress;
+import com.core.im.tenant.modal.user.AppUser;
+import com.core.im.tenant.modal.user.UserAddress;
+import com.core.im.tenant.modal.user.UserDetail;
+import com.core.im.tenant.modal.user.UserPayment;
+import com.core.im.tenant.modal.user.UserRole;
+import com.core.im.tenant.modal.viewed.Viewed;
 import com.cos.core.config.ConnectionPoolType;
 import com.cos.core.config.factory.ConfigurationSessionFactory;
 import com.cos.core.config.factory.IConfigurationSessionFactory;
@@ -101,7 +100,7 @@ public class BeanConfiguration {
     @Bean
     public SessionFactory sessionFactory() {
         IConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
-               ConnectionPoolType.HIKARI, ConfigDbType.XML
+               ConnectionPoolType.HIKARI
         );
         return configurationSessionFactory.getSessionFactory();
     }

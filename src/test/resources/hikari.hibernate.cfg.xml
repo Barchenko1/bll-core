@@ -23,45 +23,45 @@
         <property name="hibernate.hikari.idleTimeout">300000</property>
         <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
         <!-- add annotated resources here -->
-        <mapping class="com.core.im.modal.order.OrderItem" />
-        <mapping class="com.core.im.modal.order.OrderStatus" />
-        <mapping class="com.core.im.modal.order.OrderDetail" />
-        <mapping class="com.core.im.modal.order.OrderAddress" />
-        <mapping class="com.core.im.modal.order.OrderHistory" />
+        <mapping class="com.core.im.tenant.modal.order.OrderItem" />
+        <mapping class="com.core.im.tenant.modal.order.OrderStatus" />
+        <mapping class="com.core.im.tenant.modal.order.OrderDetail" />
+        <mapping class="com.core.im.tenant.modal.order.OrderAddress" />
+        <mapping class="com.core.im.tenant.modal.order.OrderHistory" />
 
-        <mapping class="com.core.im.modal.user.UserRole" />
-        <mapping class="com.core.im.modal.user.UserDetail" />
-        <mapping class="com.core.im.modal.user.UserPayment" />
-        <mapping class="com.core.im.modal.user.UserAddress" />
+        <mapping class="com.core.im.tenant.modal.user.UserRole" />
+        <mapping class="com.core.im.tenant.modal.user.UserDetail" />
+        <mapping class="com.core.im.tenant.modal.user.UserPayment" />
+        <mapping class="com.core.im.tenant.modal.user.UserAddress" />
 
-        <mapping class="com.core.im.modal.product.ProductType" />
-        <mapping class="com.core.im.modal.product.Discount" />
-        <mapping class="com.core.im.modal.product.Brand" />
-        <mapping class="com.core.im.modal.product.Category" />
-        <mapping class="com.core.im.modal.product.ProductStatus" />
+        <mapping class="com.core.im.tenant.modal.product.ProductType" />
+        <mapping class="com.core.im.tenant.modal.product.Discount" />
+        <mapping class="com.core.im.tenant.modal.product.Brand" />
+        <mapping class="com.core.im.tenant.modal.product.Category" />
+        <mapping class="com.core.im.tenant.modal.product.ProductStatus" />
 
-        <mapping class="com.core.im.modal.post.Comment" />
-        <mapping class="com.core.im.modal.post.Post" />
+        <mapping class="com.core.im.tenant.modal.post.Comment" />
+        <mapping class="com.core.im.tenant.modal.post.Post" />
 
-        <mapping class="com.core.im.modal.shop.ShopAddress" />
-        <mapping class="com.core.im.modal.store.StoreAddress" />
+        <mapping class="com.core.im.tenant.modal.shop.ShopAddress" />
+        <mapping class="com.core.im.tenant.modal.store.StoreAddress" />
 
-        <mapping class="com.core.im.modal.store.Store" />
-        <mapping class="com.core.im.modal.shop.Shop" />
+        <mapping class="com.core.im.tenant.modal.store.Store" />
+        <mapping class="com.core.im.tenant.modal.shop.Shop" />
 
-        <mapping class="com.core.im.modal.option.OptionGroup" />
-        <mapping class="com.core.im.modal.option.Option" />
+        <mapping class="com.core.im.tenant.modal.option.OptionGroup" />
+        <mapping class="com.core.im.tenant.modal.option.Option" />
 
-        <mapping class="com.core.im.modal.bucket.Bucket" />
-        <mapping class="com.core.im.modal.liked.Liked" />
-        <mapping class="com.core.im.modal.viewed.Viewed" />
+        <mapping class="com.core.im.tenant.modal.bucket.Bucket" />
+        <mapping class="com.core.im.tenant.modal.liked.Liked" />
+        <mapping class="com.core.im.tenant.modal.viewed.Viewed" />
 
-        <mapping class="com.core.im.modal.product.Product" />
+        <mapping class="com.core.im.tenant.modal.product.Product" />
 
-        <mapping class="com.core.im.modal.user.AppUser" />
+        <mapping class="com.core.im.tenant.modal.user.AppUser" />
 
-        <mapping class="com.core.im.modal.review.Review" />
-        <mapping class="com.core.im.modal.product.Rating" />
+        <mapping class="com.core.im.tenant.modal.review.Review" />
+        <mapping class="com.core.im.tenant.modal.product.Rating" />
 
     </session-factory>
 </hibernate-configuration>

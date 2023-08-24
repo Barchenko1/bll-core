@@ -105,6 +105,14 @@ public class BeanConfiguration {
         return configurationSessionFactory.getSessionFactory();
     }
 
+    @Bean
+    public SessionFactory tenantSessionFactory() {
+        IConfigurationSessionFactory configurationSessionFactory = new ConfigurationSessionFactory(
+                "tenant.hikari.hibernate.cfg.xml"
+        );
+        return configurationSessionFactory.getSessionFactory();
+    }
+
     //dto bean example
 //    @Bean
 //    public IDtoEntityDao dtoEntityDao(SessionFactory sessionFactory) {

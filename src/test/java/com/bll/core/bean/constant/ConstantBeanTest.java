@@ -16,24 +16,32 @@ import com.core.im.tenant.modal.product.Rating;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.sql.DataSource;
+import java.io.InputStream;
 import java.util.Map;
 
-@ExtendWith(DBUnitExtension.class)
+import static org.apache.commons.dbcp2.BasicDataSourceFactory.createDataSource;
+
+@ExtendWith({DBUnitExtension.class})
 @DataSet(cleanAfter = true)
 public class ConstantBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
 
     @BeforeAll
     public static void getSessionFactory() {
-        dataSource = getHikariDataSource();
+        dataSource = getTenantHikariDataSource();
         connectionHolder = dataSource::getConnection;
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initCategoryDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initOrderStatusDataSet.xml");
@@ -48,15 +56,12 @@ public class ConstantBeanTest extends AbstractBeanTest {
 
     @Test
     void brandConstantDaoBeanTest() {
-        String[] beanNames = context.getBeanDefinitionNames();
         Map<String, Brand> brandMap = context.getBean("brandMap", Map.class);
         Assertions.assertFalse(brandMap.isEmpty());
     }
 
     @Test
-    @DataSet(cleanBefore = true, cleanAfter = true)
     void categoryConstantDaoBeanTest() {
-        String[] beanNames = context.getBeanDefinitionNames();
         Map<String, Category> categoryMap =
                 (Map<String, Category>) context.getBean("categoryMap");
         Assertions.assertFalse(categoryMap.isEmpty());
@@ -64,16 +69,13 @@ public class ConstantBeanTest extends AbstractBeanTest {
 
     @Test
     void orderStatusConstantDaoBeanTest() {
-        String[] beanNames = context.getBeanDefinitionNames();
         Map<OrderStatusEnum, OrderStatus> orderStatusMap =
                 (Map<OrderStatusEnum, OrderStatus>) context.getBean("orderStatusMap");
         Assertions.assertFalse(orderStatusMap.isEmpty());
     }
 
     @Test
-    @DataSet(cleanBefore = true, cleanAfter = true)
     void productStatusConstantDaoBeanTest() {
-        String[] beanNames = context.getBeanDefinitionNames();
         Map<ProductStatusEnum, ProductStatus> productStatusMap =
                 (Map<ProductStatusEnum, ProductStatus>) context.getBean("productStatusMap");
         Assertions.assertFalse(productStatusMap.isEmpty());
@@ -81,7 +83,6 @@ public class ConstantBeanTest extends AbstractBeanTest {
 
     @Test
     void productTypeConstantDaoBeanTest() {
-        String[] beanNames = context.getBeanDefinitionNames();
         Map<String, ProductType> productTypeMap =
                 (Map<String, ProductType>) context.getBean("productTypeMap");
         Assertions.assertFalse(productTypeMap.isEmpty());
@@ -89,9 +90,9 @@ public class ConstantBeanTest extends AbstractBeanTest {
 
     @Test
     void ratingConstantDaoBeanTest() {
-        String[] beanNames = context.getBeanDefinitionNames();
         Map<RateEnum, Rating> ratingMap =
                 (Map<RateEnum, Rating>) context.getBean("ratingMap");
         Assertions.assertFalse(ratingMap.isEmpty());
     }
+
 }

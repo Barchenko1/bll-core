@@ -1,38 +1,23 @@
-package com.bll.core.bean.create;
+package com.bll.core.bean.tenant.create;
 
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
-import com.core.im.tenant.constant.BrandEnum;
-import com.core.im.tenant.constant.CategoryEnum;
-import com.core.im.tenant.constant.OrderStatusEnum;
-import com.core.im.tenant.constant.ProductStatusEnum;
-import com.core.im.tenant.constant.ProductTypeEnum;
-import com.core.im.tenant.constant.RoleEnum;
+import com.core.im.tenant.constant.*;
 import com.core.im.tenant.modal.order.OrderAddress;
 import com.core.im.tenant.modal.order.OrderDetail;
 import com.core.im.tenant.modal.order.OrderStatus;
-import com.core.im.tenant.modal.product.Brand;
-import com.core.im.tenant.modal.product.Category;
-import com.core.im.tenant.modal.product.Discount;
-import com.core.im.tenant.modal.product.ProductStatus;
-import com.core.im.tenant.modal.product.ProductType;
+import com.core.im.tenant.modal.product.*;
 import com.core.im.tenant.modal.user.AppUser;
 import com.core.im.tenant.modal.user.UserAddress;
 import com.core.im.tenant.modal.user.UserDetail;
-import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
 import com.cos.core.dao.order.IOrderAddressDao;
 import com.cos.core.dao.order.IOrderDetailDao;
 import com.cos.core.dao.order.IOrderStatusDao;
-import com.cos.core.dao.product.IBrandDao;
-import com.cos.core.dao.product.ICategoryDao;
-import com.cos.core.dao.product.IDiscountDao;
-import com.cos.core.dao.product.IProductStatusDao;
-import com.cos.core.dao.product.IProductTypeDao;
+import com.cos.core.dao.product.*;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.dao.user.IUserAddressDao;
 import com.cos.core.dao.user.IUserDetailDao;
-import com.cos.core.dao.user.IUserPaymentDao;
 import com.cos.core.dao.user.IUserRoleDao;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
@@ -48,29 +33,36 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.List;
 
 @ExtendWith(DBUnitExtension.class)
-public class CreateBeanTest extends AbstractBeanTest {
+public class CreateTenantBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
 
     @BeforeAll
     public static void getSessionFactory() {
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class);
         sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
-        dataSource = getHikariDataSource();
+        dataSource = getTenantHikariDataSource();
         connectionHolder = dataSource::getConnection;
     }
 
     //user beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/user/createExpectedUserSet.xml")
     void appUserDaoBeanTest() {
-        String[] beanNames = context.getBeanDefinitionNames();
         IAppUserDao<AppUser> appUserDao = context.getBean(IAppUserDao.class);
+        AppUser appUser = new AppUser();
+        appUser.setEmail("test@gmail.com");
+        appUser.setUsername("test");
+        appUser.setPassword("password");
+        appUserDao.saveEntity(appUser);
+
         List<AppUser> appUserList = appUserDao.getEntityListBySQLQuery("select * from app_user a;");
-        Assertions.assertTrue(appUserList.isEmpty());
+        Assertions.assertFalse(appUserList.isEmpty());
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/user/createExpectedUserRoleSet.xml")
     void userRoleDaoBeanTest() {
         IUserRoleDao<UserRole> userRoleDao = context.getBean(IUserRoleDao.class);
         UserRole userRole = new UserRole();
@@ -84,17 +76,7 @@ public class CreateBeanTest extends AbstractBeanTest {
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    void userPaymentDaoBeanTest() {
-        IUserPaymentDao<UserPayment> userPaymentDao = context.getBean(IUserPaymentDao.class);
-        UserPayment userPayment = new UserPayment();
-        userPaymentDao.saveEntity(userPayment);
-        List<UserPayment> userRoleList = userPaymentDao.getEntityListBySQLQuery("select * from user_payment u;");
-        Assertions.assertFalse(userRoleList.isEmpty());
-
-    }
-
-    @Test
-    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/user/createExpectedUserAddressSet.xml")
     void userAddressBeanTest() {
         IUserAddressDao<UserAddress> userAddressDao = context.getBean(IUserAddressDao.class);
         UserAddress userAddress = new UserAddress();
@@ -111,7 +93,7 @@ public class CreateBeanTest extends AbstractBeanTest {
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/product/createExpectedUserDetailSet.xml")
+    @ExpectedDataSet("/data/expected/create/user/createExpectedUserDetailSet.xml")
     void userDetailDaoBeanTest() {
         IUserDetailDao<UserDetail> userDetailDao = context.getBean(IUserDetailDao.class);
         UserDetail userDetail = new UserDetail();

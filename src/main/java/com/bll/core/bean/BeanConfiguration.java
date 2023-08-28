@@ -1,5 +1,9 @@
 package com.bll.core.bean;
 
+import com.core.im.org.modal.OrgUser;
+import com.core.im.org.modal.Organization;
+import com.core.im.org.modal.Tenant;
+import com.core.im.org.modal.TenantConfiguration;
 import com.core.im.tenant.modal.bucket.Bucket;
 import com.core.im.tenant.modal.liked.Liked;
 import com.core.im.tenant.modal.option.Option;
@@ -26,7 +30,6 @@ import com.core.im.tenant.modal.store.StoreAddress;
 import com.core.im.tenant.modal.user.AppUser;
 import com.core.im.tenant.modal.user.UserAddress;
 import com.core.im.tenant.modal.user.UserDetail;
-import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
 import com.core.im.tenant.modal.viewed.Viewed;
 import com.cos.core.config.ConnectionPoolType;
@@ -46,6 +49,8 @@ import com.cos.core.dao.basic.BasicOrderDetailDao;
 import com.cos.core.dao.basic.BasicOrderHistoryDao;
 import com.cos.core.dao.basic.BasicOrderItemDao;
 import com.cos.core.dao.basic.BasicOrderStatusDao;
+import com.cos.core.dao.basic.BasicOrgUserDao;
+import com.cos.core.dao.basic.BasicOrganizationDao;
 import com.cos.core.dao.basic.BasicPostDao;
 import com.cos.core.dao.basic.BasicProductDao;
 import com.cos.core.dao.basic.BasicProductStatusDao;
@@ -56,9 +61,10 @@ import com.cos.core.dao.basic.BasicShopAddressDao;
 import com.cos.core.dao.basic.BasicShopDao;
 import com.cos.core.dao.basic.BasicStoreAddressDao;
 import com.cos.core.dao.basic.BasicStoreDao;
+import com.cos.core.dao.basic.BasicTenantConfigurationDao;
+import com.cos.core.dao.basic.BasicTenantDao;
 import com.cos.core.dao.basic.BasicUserAddressDao;
 import com.cos.core.dao.basic.BasicUserDetailDao;
-import com.cos.core.dao.basic.BasicUserPaymentDao;
 import com.cos.core.dao.basic.BasicUserRoleDao;
 import com.cos.core.dao.basic.BasicViewedDao;
 import com.cos.core.dao.bucket.IBucketDao;
@@ -70,6 +76,10 @@ import com.cos.core.dao.order.IOrderDetailDao;
 import com.cos.core.dao.order.IOrderHistoryDao;
 import com.cos.core.dao.order.IOrderItemDao;
 import com.cos.core.dao.order.IOrderStatusDao;
+import com.cos.core.dao.org.IOrgUserDao;
+import com.cos.core.dao.org.IOrganizationDao;
+import com.cos.core.dao.org.ITenantConfigDao;
+import com.cos.core.dao.org.ITenantDao;
 import com.cos.core.dao.post.ICommentDao;
 import com.cos.core.dao.post.IPostDao;
 import com.cos.core.dao.product.IBrandDao;
@@ -87,7 +97,6 @@ import com.cos.core.dao.store.IStoreDao;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.dao.user.IUserAddressDao;
 import com.cos.core.dao.user.IUserDetailDao;
-import com.cos.core.dao.user.IUserPaymentDao;
 import com.cos.core.dao.user.IUserRoleDao;
 import com.cos.core.dao.viewed.IViewedDao;
 import org.hibernate.SessionFactory;
@@ -122,6 +131,34 @@ public class BeanConfiguration {
 //    }
 
     @Bean
+    public ITenantConfigDao<TenantConfiguration> tenantConfigurationDao(SessionFactory tenantSessionFactory) {
+        ITenantConfigDao<TenantConfiguration> tenantConfigDao = new BasicTenantConfigurationDao<>(tenantSessionFactory);
+        tenantConfigDao.setClazz(TenantConfiguration.class);
+        return tenantConfigDao;
+    }
+
+    @Bean
+    public ITenantDao<Tenant> tenantDao(SessionFactory tenantSessionFactory) {
+        ITenantDao<Tenant> tenantConfigDao = new BasicTenantDao<>(tenantSessionFactory);
+        tenantConfigDao.setClazz(Tenant.class);
+        return tenantConfigDao;
+    }
+
+    @Bean
+    public IOrganizationDao<Organization> organizationDao(SessionFactory tenantSessionFactory) {
+        IOrganizationDao<Organization> organizationDao = new BasicOrganizationDao<>(tenantSessionFactory);
+        organizationDao.setClazz(Organization.class);
+        return organizationDao;
+    }
+
+    @Bean
+    public IOrgUserDao<OrgUser> orgUserDao(SessionFactory tenantSessionFactory) {
+        IOrgUserDao<OrgUser> organizationDao = new BasicOrgUserDao<>(tenantSessionFactory);
+        organizationDao.setClazz(OrgUser.class);
+        return organizationDao;
+    }
+
+    @Bean
     public IAppUserDao<AppUser> appUserDao(SessionFactory sessionFactory) {
         IAppUserDao<AppUser> appUserDao = new BasicAppUserDao<>(sessionFactory);
         appUserDao.setClazz(AppUser.class);
@@ -140,13 +177,6 @@ public class BeanConfiguration {
         IUserDetailDao<UserDetail> userDetailsDao = new BasicUserDetailDao<>(sessionFactory);
         userDetailsDao.setClazz(UserDetail.class);
         return userDetailsDao;
-    }
-
-    @Bean
-    public IUserPaymentDao<UserPayment> userPaymentDao(SessionFactory sessionFactory) {
-        IUserPaymentDao<UserPayment> userPaymentDao = new BasicUserPaymentDao<>(sessionFactory);
-        userPaymentDao.setClazz(UserPayment.class);
-        return userPaymentDao;
     }
 
     @Bean

@@ -21,7 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ExtendWith({DBUnitExtension.class})
 public class TransactionBeanTest extends AbstractBeanTest {
@@ -72,6 +74,7 @@ public class TransactionBeanTest extends AbstractBeanTest {
         cleanDbByDao(tenantConfigDao, getQuery("tenant_configuration"));
 
         List<?> list = Arrays.asList(organization, orgUser, tenant, tenantConfiguration);
+
         transactionManager.useTransaction(list);
         Assertions.assertFalse(isTableEmpty(organizationDao, getQuery("org")));
 

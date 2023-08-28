@@ -70,24 +70,24 @@ public abstract class AbstractBeanTest {
         return String.format(SELECT_ALL, table);
     }
 
-    protected Object getEntity(IEntityDao<?> entityDao, String table, String paramName, String paramValue) {
+    protected Object getEntity(IEntityDao entityDao, String table, String paramName, String paramValue) {
         return entityDao.getEntityBySQLQuery(
                 String.format(SELECT_BY_PARAM, table, paramName, paramValue));
     }
 
-    protected Object getEntity(IEntityDao<?> entityDao, String table, String paramName, Long paramValue) {
+    protected Object getEntity(IEntityDao entityDao, String table, String paramName, Long paramValue) {
         return entityDao.getEntityBySQLQuery(
                 String.format(SELECT_BY_PARAM, table, paramName, paramValue));
     }
 
-    protected <T> void cleanDbByDao(IEntityDao<T> entityDao, String query) {
+    protected <T> void cleanDbByDao(IEntityDao entityDao, String query) {
         List<T> firstOrganizationList = entityDao.getEntityListBySQLQuery(query);
         if (!firstOrganizationList.isEmpty()) {
             firstOrganizationList.forEach(entityDao::deleteEntity);
         }
     }
 
-    protected <T> boolean isTableEmpty(IEntityDao<T> entityDao, String query) {
+    protected <T> boolean isTableEmpty(IEntityDao entityDao, String query) {
         List<T> organizationList = entityDao.getEntityListBySQLQuery(query);
         return organizationList.isEmpty();
     }

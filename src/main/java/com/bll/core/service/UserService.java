@@ -1,25 +1,24 @@
 package com.bll.core.service;
 
-import com.core.im.tenant.modal.user.AppUser;
 import com.cos.core.dao.user.IAppUserDao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService<E> {
+public class UserService {
 
     private final SessionFactory sessionFactory;
-    private final IAppUserDao<E> appUserDao;
+    private final IAppUserDao appUserDao;
 
     @Autowired
-    public UserService(SessionFactory sessionFactory, IAppUserDao<E> appUserDao) {
+    public UserService(SessionFactory sessionFactory, IAppUserDao appUserDao) {
         this.sessionFactory = sessionFactory;
         this.appUserDao = appUserDao;
     }
 
 
-    public void addUser(E user) {
+    public <E> void addUser(E user) {
         appUserDao.saveEntity(user);
     }
 

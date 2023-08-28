@@ -99,6 +99,8 @@ import com.cos.core.dao.user.IUserAddressDao;
 import com.cos.core.dao.user.IUserDetailDao;
 import com.cos.core.dao.user.IUserRoleDao;
 import com.cos.core.dao.viewed.IViewedDao;
+import com.cos.core.transaction.BasicTransactionManager;
+import com.cos.core.transaction.ITransactionManager;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -122,6 +124,14 @@ public class BeanConfiguration {
         return configurationSessionFactory.getSessionFactory();
     }
 
+    @Bean
+    public ITransactionManager transactionManager(SessionFactory tenantSessionFactory) {
+        ITransactionManager transactionManager = new BasicTransactionManager(
+                tenantSessionFactory
+        );
+        return transactionManager;
+    }
+
     //dto bean example
 //    @Bean
 //    public IDtoEntityDao dtoEntityDao(SessionFactory sessionFactory) {
@@ -131,225 +141,225 @@ public class BeanConfiguration {
 //    }
 
     @Bean
-    public ITenantConfigDao<TenantConfiguration> tenantConfigurationDao(SessionFactory tenantSessionFactory) {
-        ITenantConfigDao<TenantConfiguration> tenantConfigDao = new BasicTenantConfigurationDao<>(tenantSessionFactory);
+    public ITenantConfigDao tenantConfigurationDao(SessionFactory tenantSessionFactory) {
+        ITenantConfigDao tenantConfigDao = new BasicTenantConfigurationDao(tenantSessionFactory);
         tenantConfigDao.setClazz(TenantConfiguration.class);
         return tenantConfigDao;
     }
 
     @Bean
-    public ITenantDao<Tenant> tenantDao(SessionFactory tenantSessionFactory) {
-        ITenantDao<Tenant> tenantConfigDao = new BasicTenantDao<>(tenantSessionFactory);
+    public ITenantDao tenantDao(SessionFactory tenantSessionFactory) {
+        ITenantDao tenantConfigDao = new BasicTenantDao(tenantSessionFactory);
         tenantConfigDao.setClazz(Tenant.class);
         return tenantConfigDao;
     }
 
     @Bean
-    public IOrganizationDao<Organization> organizationDao(SessionFactory tenantSessionFactory) {
-        IOrganizationDao<Organization> organizationDao = new BasicOrganizationDao<>(tenantSessionFactory);
+    public IOrganizationDao organizationDao(SessionFactory tenantSessionFactory) {
+        IOrganizationDao organizationDao = new BasicOrganizationDao(tenantSessionFactory);
         organizationDao.setClazz(Organization.class);
         return organizationDao;
     }
 
     @Bean
-    public IOrgUserDao<OrgUser> orgUserDao(SessionFactory tenantSessionFactory) {
-        IOrgUserDao<OrgUser> organizationDao = new BasicOrgUserDao<>(tenantSessionFactory);
+    public IOrgUserDao orgUserDao(SessionFactory tenantSessionFactory) {
+        IOrgUserDao organizationDao = new BasicOrgUserDao(tenantSessionFactory);
         organizationDao.setClazz(OrgUser.class);
         return organizationDao;
     }
 
     @Bean
-    public IAppUserDao<AppUser> appUserDao(SessionFactory sessionFactory) {
-        IAppUserDao<AppUser> appUserDao = new BasicAppUserDao<>(sessionFactory);
+    public IAppUserDao appUserDao(SessionFactory sessionFactory) {
+        IAppUserDao appUserDao = new BasicAppUserDao(sessionFactory);
         appUserDao.setClazz(AppUser.class);
         return appUserDao;
     }
 
     @Bean
-    public IUserRoleDao<UserRole> userRoleDao(SessionFactory sessionFactory) {
-        IUserRoleDao<UserRole> userRoleDao = new BasicUserRoleDao<>(sessionFactory);
+    public IUserRoleDao userRoleDao(SessionFactory sessionFactory) {
+        IUserRoleDao userRoleDao = new BasicUserRoleDao(sessionFactory);
         userRoleDao.setClazz(UserRole.class);
         return userRoleDao;
     }
 
     @Bean
-    public IUserDetailDao<UserDetail> userDetailsDao(SessionFactory sessionFactory) {
-        IUserDetailDao<UserDetail> userDetailsDao = new BasicUserDetailDao<>(sessionFactory);
+    public IUserDetailDao userDetailsDao(SessionFactory sessionFactory) {
+        IUserDetailDao userDetailsDao = new BasicUserDetailDao(sessionFactory);
         userDetailsDao.setClazz(UserDetail.class);
         return userDetailsDao;
     }
 
     @Bean
-    public IUserAddressDao<UserAddress> userAddressDao(SessionFactory sessionFactory) {
-        IUserAddressDao<UserAddress> userAddressDao = new BasicUserAddressDao<>(sessionFactory);
+    public IUserAddressDao userAddressDao(SessionFactory sessionFactory) {
+        IUserAddressDao userAddressDao = new BasicUserAddressDao(sessionFactory);
         userAddressDao.setClazz(UserAddress.class);
         return userAddressDao;
     }
 
     @Bean
-    public IOrderItemDao<OrderItem> orderItemDao(SessionFactory sessionFactory) {
-        IOrderItemDao<OrderItem> orderItemDao = new BasicOrderItemDao<>(sessionFactory);
+    public IOrderItemDao orderItemDao(SessionFactory sessionFactory) {
+        IOrderItemDao orderItemDao = new BasicOrderItemDao(sessionFactory);
         orderItemDao.setClazz(OrderItem.class);
         return orderItemDao;
     }
 
     @Bean
-    public IOrderStatusDao<OrderStatus> orderStatusDao(SessionFactory sessionFactory) {
-        IOrderStatusDao<OrderStatus> orderStatusDao = new BasicOrderStatusDao<>(sessionFactory);
+    public IOrderStatusDao orderStatusDao(SessionFactory sessionFactory) {
+        IOrderStatusDao orderStatusDao = new BasicOrderStatusDao(sessionFactory);
         orderStatusDao.setClazz(OrderStatus.class);
         return orderStatusDao;
     }
 
     @Bean
-    public IOrderDetailDao<OrderDetail> orderDetailDao(SessionFactory sessionFactory) {
-        IOrderDetailDao<OrderDetail> orderDetailDao = new BasicOrderDetailDao<>(sessionFactory);
+    public IOrderDetailDao orderDetailDao(SessionFactory sessionFactory) {
+        IOrderDetailDao orderDetailDao = new BasicOrderDetailDao(sessionFactory);
         orderDetailDao.setClazz(OrderDetail.class);
         return orderDetailDao;
     }
 
     @Bean
-    public IOrderAddressDao<OrderAddress> orderAddressDao(SessionFactory sessionFactory) {
-        IOrderAddressDao<OrderAddress> orderAddressDao = new BasicOrderAddressDao<>(sessionFactory);
+    public IOrderAddressDao orderAddressDao(SessionFactory sessionFactory) {
+        IOrderAddressDao orderAddressDao = new BasicOrderAddressDao(sessionFactory);
         orderAddressDao.setClazz(OrderAddress.class);
         return orderAddressDao;
     }
 
     @Bean
-    public IOrderHistoryDao<OrderHistory> orderHistoryDao(SessionFactory sessionFactory) {
-        IOrderHistoryDao<OrderHistory> orderHistoryDao = new BasicOrderHistoryDao<>(sessionFactory);
+    public IOrderHistoryDao orderHistoryDao(SessionFactory sessionFactory) {
+        IOrderHistoryDao orderHistoryDao = new BasicOrderHistoryDao(sessionFactory);
         orderHistoryDao.setClazz(OrderHistory.class);
         return orderHistoryDao;
     }
 
     @Bean
-    public IProductTypeDao<ProductType> productTypeDao(SessionFactory sessionFactory) {
-        IProductTypeDao<ProductType> productTypeDao = new BasicProductTypeDao<>(sessionFactory);
+    public IProductTypeDao productTypeDao(SessionFactory sessionFactory) {
+        IProductTypeDao productTypeDao = new BasicProductTypeDao(sessionFactory);
         productTypeDao.setClazz(ProductType.class);
         return productTypeDao;
     }
 
     @Bean
-    public IDiscountDao<Discount> discountDao(SessionFactory sessionFactory) {
-        IDiscountDao<Discount> discountDao = new BasicDiscountDao<>(sessionFactory);
+    public IDiscountDao discountDao(SessionFactory sessionFactory) {
+        IDiscountDao discountDao = new BasicDiscountDao(sessionFactory);
         discountDao.setClazz(Discount.class);
         return discountDao;
     }
 
     @Bean
-    public IBrandDao<Brand> brandDao(SessionFactory sessionFactory) {
-        IBrandDao<Brand> brandDao = new BasicBrandDao<>(sessionFactory);
+    public IBrandDao brandDao(SessionFactory sessionFactory) {
+        IBrandDao brandDao = new BasicBrandDao(sessionFactory);
         brandDao.setClazz(Brand.class);
         return brandDao;
     }
 
     @Bean
-    public ICategoryDao<Category> categoryDao(SessionFactory sessionFactory) {
-        ICategoryDao<Category> categoryDao = new BasicCategoryDao<>(sessionFactory);
+    public ICategoryDao categoryDao(SessionFactory sessionFactory) {
+        ICategoryDao categoryDao = new BasicCategoryDao(sessionFactory);
         categoryDao.setClazz(Category.class);
         return categoryDao;
     }
 
     @Bean
-    public IProductStatusDao<ProductStatus> productStatusDao(SessionFactory sessionFactory) {
-        IProductStatusDao<ProductStatus> productStatusDao = new BasicProductStatusDao<>(sessionFactory);
+    public IProductStatusDao productStatusDao(SessionFactory sessionFactory) {
+        IProductStatusDao productStatusDao = new BasicProductStatusDao(sessionFactory);
         productStatusDao.setClazz(ProductStatus.class);
         return productStatusDao;
     }
 
     @Bean
-    public ICommentDao<Comment> commentDao(SessionFactory sessionFactory) {
-        ICommentDao<Comment> commentDao = new BasicCommentDao<>(sessionFactory);
+    public ICommentDao commentDao(SessionFactory sessionFactory) {
+        ICommentDao commentDao = new BasicCommentDao(sessionFactory);
         commentDao.setClazz(Comment.class);
         return commentDao;
     }
 
     @Bean
-    public IPostDao<Post> postDao(SessionFactory sessionFactory) {
-        IPostDao<Post> postDao = new BasicPostDao<>(sessionFactory);
+    public IPostDao postDao(SessionFactory sessionFactory) {
+        IPostDao postDao = new BasicPostDao(sessionFactory);
         postDao.setClazz(Post.class);
         return postDao;
     }
 
     @Bean
-    public IShopAddressDao<ShopAddress> shopAddressDao(SessionFactory sessionFactory) {
-        IShopAddressDao<ShopAddress> shopAddressDao = new BasicShopAddressDao<>(sessionFactory);
+    public IShopAddressDao shopAddressDao(SessionFactory sessionFactory) {
+        IShopAddressDao shopAddressDao = new BasicShopAddressDao(sessionFactory);
         shopAddressDao.setClazz(ShopAddress.class);
         return shopAddressDao;
     }
 
     @Bean
-    public IStoreAddressDao<StoreAddress> storeAddressDao(SessionFactory sessionFactory) {
-        IStoreAddressDao<StoreAddress> storeAddressDao = new BasicStoreAddressDao<>(sessionFactory);
+    public IStoreAddressDao storeAddressDao(SessionFactory sessionFactory) {
+        IStoreAddressDao storeAddressDao = new BasicStoreAddressDao(sessionFactory);
         storeAddressDao.setClazz(StoreAddress.class);
         return storeAddressDao;
     }
 
     @Bean
-    public IShopDao<Shop> shopDao(SessionFactory sessionFactory) {
-        IShopDao<Shop> shopDao = new BasicShopDao<>(sessionFactory);
+    public IShopDao shopDao(SessionFactory sessionFactory) {
+        IShopDao shopDao = new BasicShopDao(sessionFactory);
         shopDao.setClazz(Shop.class);
         return shopDao;
     }
 
     @Bean
-    public IStoreDao<Store> storeDao(SessionFactory sessionFactory) {
-        IStoreDao<Store> storeDao = new BasicStoreDao<>(sessionFactory);
+    public IStoreDao storeDao(SessionFactory sessionFactory) {
+        IStoreDao storeDao = new BasicStoreDao(sessionFactory);
         storeDao.setClazz(Store.class);
         return storeDao;
     }
 
     @Bean
-    public IOptionGroupDao<OptionGroup> optionGroupDao(SessionFactory sessionFactory) {
-        IOptionGroupDao<OptionGroup> optionGroupDao = new BasicOptionGroupDao<>(sessionFactory);
+    public IOptionGroupDao optionGroupDao(SessionFactory sessionFactory) {
+        IOptionGroupDao optionGroupDao = new BasicOptionGroupDao(sessionFactory);
         optionGroupDao.setClazz(OptionGroup.class);
         return optionGroupDao;
     }
 
     @Bean
-    public IOptionDao<Option> optionDao(SessionFactory sessionFactory) {
-        IOptionDao<Option> optionDao = new BasicOptionDao<>(sessionFactory);
+    public IOptionDao optionDao(SessionFactory sessionFactory) {
+        IOptionDao optionDao = new BasicOptionDao(sessionFactory);
         optionDao.setClazz(Option.class);
         return optionDao;
     }
 
     @Bean
-    public IBucketDao<Bucket> bucketDao(SessionFactory sessionFactory) {
-        IBucketDao<Bucket> bucketDao = new BasicBucketDao<>(sessionFactory);
+    public IBucketDao bucketDao(SessionFactory sessionFactory) {
+        IBucketDao bucketDao = new BasicBucketDao(sessionFactory);
         bucketDao.setClazz(Bucket.class);
         return bucketDao;
     }
 
     @Bean
-    public ILikedDao<Liked> likedDao(SessionFactory sessionFactory) {
-        ILikedDao<Liked> likedDao = new BasicLikedDao<>(sessionFactory);
+    public ILikedDao likedDao(SessionFactory sessionFactory) {
+        ILikedDao likedDao = new BasicLikedDao(sessionFactory);
         likedDao.setClazz(Liked.class);
         return likedDao;
     }
 
     @Bean
-    public IViewedDao<Viewed> viewedDao(SessionFactory sessionFactory) {
-        IViewedDao<Viewed> viewedDao = new BasicViewedDao<>(sessionFactory);
+    public IViewedDao viewedDao(SessionFactory sessionFactory) {
+        IViewedDao viewedDao = new BasicViewedDao(sessionFactory);
         viewedDao.setClazz(Viewed.class);
         return viewedDao;
     }
 
     @Bean
-    public IProductDao<Product> productDao(SessionFactory sessionFactory) {
-        IProductDao<Product> productDao = new BasicProductDao<>(sessionFactory);
+    public IProductDao productDao(SessionFactory sessionFactory) {
+        IProductDao productDao = new BasicProductDao(sessionFactory);
         productDao.setClazz(Product.class);
         return productDao;
     }
 
     @Bean
-    public IReviewDao<Review> reviewDao(SessionFactory sessionFactory) {
-        IReviewDao<Review> reviewDao = new BasicReviewDao<>(sessionFactory);
+    public IReviewDao reviewDao(SessionFactory sessionFactory) {
+        IReviewDao reviewDao = new BasicReviewDao(sessionFactory);
         reviewDao.setClazz(Review.class);
         return reviewDao;
     }
 
     @Bean
-    public IRatingDao<Rating> ratingDao(SessionFactory sessionFactory) {
-        IRatingDao<Rating> ratingDao = new BasicRatingDao<>(sessionFactory);
+    public IRatingDao ratingDao(SessionFactory sessionFactory) {
+        IRatingDao ratingDao = new BasicRatingDao(sessionFactory);
         ratingDao.setClazz(Rating.class);
         return ratingDao;
     }

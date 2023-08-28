@@ -11,25 +11,20 @@ import com.cos.core.dao.org.IOrganizationDao;
 import com.cos.core.dao.org.ITenantConfigDao;
 import com.cos.core.dao.org.ITenantDao;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
-import com.github.database.rider.core.api.dataset.DataSet;
-import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
-import com.github.springtestdbunit.annotation.DbUnitConfiguration;
-import org.dbunit.DatabaseUnitException;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.sql.SQLException;
-
 @ExtendWith({DBUnitExtension.class})
-@DbUnitConfiguration(databaseConnection = "dataSource")
 public class CreateOrgBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
 
     @BeforeAll
-    public static void getSessionFactory() throws SQLException, DatabaseUnitException {
+    public static void getSessionFactory() {
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class);
         sessionFactory = context.getBean("tenantSessionFactory", SessionFactory.class);
         dataSource = getOrgHikariDataSource();
@@ -40,7 +35,7 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
 
     @Test
     void organizationDaoBeanTest() {
-        IOrganizationDao<Organization> organizationDao = context.getBean(IOrganizationDao.class);
+        IOrganizationDao organizationDao = context.getBean(IOrganizationDao.class);
         Organization organization = new Organization();
         organization.setClientName("test");
         organization.setDateOfCreate(time);
@@ -58,9 +53,9 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
         String updatedParam = "testUpdated";
         getFromDb.setClientName(updatedParam);
         organizationDao.updateEntity(getFromDb);
-        Organization organizationUpdatedFromDB =
+        Organization entityFromDb =
                 (Organization) getEntity(organizationDao, "org", "clientname", updatedParam);
-        Assertions.assertEquals(updatedParam, organizationUpdatedFromDB.getClientName());
+        Assertions.assertEquals(updatedParam, entityFromDb.getClientName());
         //clean after
         cleanDbByDao(organizationDao, getAllTableList);
         Assertions.assertTrue(isTableEmpty(organizationDao, getAllTableList));
@@ -68,7 +63,7 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
 
     @Test
     void tenantConfigurationDaoBeanTest() {
-        ITenantConfigDao<TenantConfiguration> tenantConfigDao = context.getBean(ITenantConfigDao.class);
+        ITenantConfigDao tenantConfigDao = context.getBean(ITenantConfigDao.class);
         TenantConfiguration tenantConfiguration = new TenantConfiguration();
         tenantConfiguration.setDateOfCreate(time);
 
@@ -85,9 +80,9 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
         //update
         getFromDb.setDateOfCreate(1693179505330L);
         tenantConfigDao.updateEntity(getFromDb);
-        TenantConfiguration organizationUpdatedFromDB =
+        TenantConfiguration entityFromDb =
                 (TenantConfiguration) getEntity(tenantConfigDao, "tenant_configuration", "dateofcreate", 1693179505330L);
-        Assertions.assertEquals(1693179505330L, organizationUpdatedFromDB.getDateOfCreate());
+        Assertions.assertEquals(1693179505330L, entityFromDb.getDateOfCreate());
         //clean after
         cleanDbByDao(tenantConfigDao, getAllTableList);
         Assertions.assertTrue(isTableEmpty(tenantConfigDao, getAllTableList));
@@ -95,7 +90,7 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
 
     @Test
     void  tenantDaoBeanTest() {
-        ITenantDao<Tenant> tenantDao = context.getBean(ITenantDao.class);
+        ITenantDao tenantDao = context.getBean(ITenantDao.class);
         Tenant tenant = new Tenant();
         tenant.setName("test");
         tenant.setDateOfCreate(time);
@@ -113,9 +108,9 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
         String updatedParam = "testUpdated";
         getFromDb.setName(updatedParam);
         tenantDao.updateEntity(getFromDb);
-        Tenant organizationUpdatedFromDB =
+        Tenant entityFromDb =
                 (Tenant) getEntity(tenantDao, "tenant", "name", updatedParam);
-        Assertions.assertEquals(updatedParam, organizationUpdatedFromDB.getName());
+        Assertions.assertEquals(updatedParam, entityFromDb.getName());
         //clean after
         cleanDbByDao(tenantDao, getAllTableList);
         Assertions.assertTrue(isTableEmpty(tenantDao, getAllTableList));
@@ -123,7 +118,7 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
 
     @Test
     void orgUserDaoBeanTest() {
-        IOrgUserDao<OrgUser> orgUserDao = context.getBean(IOrgUserDao.class);
+        IOrgUserDao orgUserDao = context.getBean(IOrgUserDao.class);
         OrgUser orgUser = new OrgUser();
         orgUser.setUsername("test");
         orgUser.setEmail("test");
@@ -144,9 +139,9 @@ public class CreateOrgBeanTest extends AbstractBeanTest {
         String updatedParam = "testUpdated";
         getFromDb.setUsername(updatedParam);
         orgUserDao.updateEntity(getFromDb);
-        OrgUser organizationUpdatedFromDB =
+        OrgUser entityFromDb =
                 (OrgUser) getEntity(orgUserDao, "org_user", "username", updatedParam);
-        Assertions.assertEquals(updatedParam, organizationUpdatedFromDB.getUsername());
+        Assertions.assertEquals(updatedParam, entityFromDb.getUsername());
         //clean after
         cleanDbByDao(orgUserDao, getAllTableList);
         Assertions.assertTrue(isTableEmpty(orgUserDao, getAllTableList));

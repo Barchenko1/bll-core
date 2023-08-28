@@ -49,7 +49,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/user/createExpectedUserSet.xml")
     void appUserDaoBeanTest() {
-        IAppUserDao<AppUser> appUserDao = context.getBean(IAppUserDao.class);
+        IAppUserDao appUserDao = context.getBean(IAppUserDao.class);
         AppUser appUser = new AppUser();
         appUser.setEmail("test@gmail.com");
         appUser.setUsername("test");
@@ -64,7 +64,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/user/createExpectedUserRoleSet.xml")
     void userRoleDaoBeanTest() {
-        IUserRoleDao<UserRole> userRoleDao = context.getBean(IUserRoleDao.class);
+        IUserRoleDao userRoleDao = context.getBean(IUserRoleDao.class);
         UserRole userRole = new UserRole();
         userRole.setRoleEnum(RoleEnum.ROLE_USER);
         userRoleDao.saveEntity(userRole);
@@ -78,7 +78,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/user/createExpectedUserAddressSet.xml")
     void userAddressBeanTest() {
-        IUserAddressDao<UserAddress> userAddressDao = context.getBean(IUserAddressDao.class);
+        IUserAddressDao userAddressDao = context.getBean(IUserAddressDao.class);
         UserAddress userAddress = new UserAddress();
         userAddress.setFlor(9);
         userAddress.setBuilding(1);
@@ -95,7 +95,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/user/createExpectedUserDetailSet.xml")
     void userDetailDaoBeanTest() {
-        IUserDetailDao<UserDetail> userDetailDao = context.getBean(IUserDetailDao.class);
+        IUserDetailDao userDetailDao = context.getBean(IUserDetailDao.class);
         UserDetail userDetail = new UserDetail();
         userDetail.setFirstName("test");
         userDetailDao.saveEntity(userDetail);
@@ -110,7 +110,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/product/createExpectedCategorySet.xml")
     void categoryDaoBeanTest() {
-        ICategoryDao<Category> categoryDao = context.getBean(ICategoryDao.class);
+        ICategoryDao categoryDao = context.getBean(ICategoryDao.class);
         Category category = new Category();
         category.setCategoryEnum(CategoryEnum.BEAUTY_AND_HEALTH);
         categoryDao.saveEntity(category);
@@ -124,7 +124,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/product/createExpectedBrandSet.xml")
     void brandDaoBeanTest() {
-        IBrandDao<Brand> brandDao = context.getBean(IBrandDao.class);
+        IBrandDao brandDao = context.getBean(IBrandDao.class);
         Brand brand = new Brand();
         brand.setBrandEnum(BrandEnum.APPLE);
         brandDao.saveEntity(brand);
@@ -138,7 +138,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/product/createExpectedDiscountSet.xml")
     void discountDaoBeanTest() {
-        IDiscountDao<Discount> discountDao = context.getBean(IDiscountDao.class);
+        IDiscountDao discountDao = context.getBean(IDiscountDao.class);
         Discount discount = new Discount();
         discount.setAmount(10);
         discountDao.saveEntity(discount);
@@ -151,7 +151,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/product/createExpectedProductTypeSet.xml")
     void productTypeDaoBeanTest() {
-        IProductTypeDao<ProductType> productTypeDao = context.getBean(IProductTypeDao.class);
+        IProductTypeDao productTypeDao = context.getBean(IProductTypeDao.class);
         ProductType productType = new ProductType();
         productType.setProductType(ProductTypeEnum.CLAUSE);
         productTypeDao.saveEntity(productType);
@@ -165,7 +165,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/product/createExpectedProductStatusSet.xml")
     void productStatusDaoBeanTest() {
-        IProductStatusDao<ProductStatus> productStatusDao = context.getBean(IProductStatusDao.class);
+        IProductStatusDao productStatusDao = context.getBean(IProductStatusDao.class);
         ProductStatus productStatus = new ProductStatus();
         productStatus.setName(ProductStatusEnum.NEW);
         productStatusDao.saveEntity(productStatus);
@@ -181,7 +181,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/order/createExpectedOrderAddressSet.xml")
     void orderAddressDaoBeanTest() {
-        IOrderAddressDao<OrderAddress> orderAddressDao = context.getBean(IOrderAddressDao.class);
+        IOrderAddressDao orderAddressDao = context.getBean(IOrderAddressDao.class);
         OrderAddress orderAddress = new OrderAddress();
         orderAddress.setApartmentNumber(1);
         orderAddress.setBuilding(1);
@@ -199,7 +199,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/order/createExpectedOrderDetailSet.xml")
     void orderDetailDaoBeanTest() {
-        IOrderDetailDao<OrderDetail> orderDetailDao = context.getBean(IOrderDetailDao.class);
+        IOrderDetailDao orderDetailDao = context.getBean(IOrderDetailDao.class);
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setFirstName("test");
         orderDetailDao.saveEntity(orderDetail);
@@ -213,7 +213,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     @DataSet(cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/order/createExpectedOrderStatusSet.xml")
     void orderStatusDaoBeanTest() {
-        IOrderStatusDao<OrderStatus> orderStatusDao = context.getBean(IOrderStatusDao.class);
+        IOrderStatusDao orderStatusDao = context.getBean(IOrderStatusDao.class);
         OrderStatus status = new OrderStatus();
         status.setName(OrderStatusEnum.NEW);
         orderStatusDao.saveEntity(status);

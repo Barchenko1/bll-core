@@ -32,6 +32,7 @@
         <mapping class="com.core.im.tenant.modal.user.UserRole" />
         <mapping class="com.core.im.tenant.modal.user.UserDetail" />
         <mapping class="com.core.im.tenant.modal.user.UserAddress" />
+        <mapping class="com.core.im.tenant.modal.user.UserPayment" />
 
         <mapping class="com.core.im.tenant.modal.product.ProductType" />
         <mapping class="com.core.im.tenant.modal.product.Discount" />

@@ -7,45 +7,54 @@ import com.core.im.tenant.constant.CategoryEnum;
 import com.core.im.tenant.constant.OrderStatusEnum;
 import com.core.im.tenant.constant.ProductStatusEnum;
 import com.core.im.tenant.constant.ProductTypeEnum;
+import com.core.im.tenant.constant.RateEnum;
 import com.core.im.tenant.constant.RoleEnum;
 import com.core.im.tenant.modal.business.BusinessAddress;
 import com.core.im.tenant.modal.business.Shop;
 import com.core.im.tenant.modal.business.Store;
+import com.core.im.tenant.modal.liked.Liked;
 import com.core.im.tenant.modal.order.OrderAddress;
 import com.core.im.tenant.modal.order.OrderDetail;
 import com.core.im.tenant.modal.order.OrderHistory;
 import com.core.im.tenant.modal.order.OrderItem;
 import com.core.im.tenant.modal.order.OrderStatus;
+import com.core.im.tenant.modal.post.Post;
 import com.core.im.tenant.modal.product.Brand;
 import com.core.im.tenant.modal.product.Category;
 import com.core.im.tenant.modal.product.Discount;
 import com.core.im.tenant.modal.product.ProductStatus;
 import com.core.im.tenant.modal.product.ProductType;
+import com.core.im.tenant.modal.product.Rating;
+import com.core.im.tenant.modal.review.Review;
 import com.core.im.tenant.modal.user.AppUser;
 import com.core.im.tenant.modal.user.UserAddress;
 import com.core.im.tenant.modal.user.UserDetail;
 import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
+import com.core.im.tenant.modal.viewed.Viewed;
 import com.cos.core.dao.business.IBusinessAddressDao;
 import com.cos.core.dao.business.IShopDao;
 import com.cos.core.dao.business.IStoreDao;
+import com.cos.core.dao.liked.ILikedDao;
 import com.cos.core.dao.order.IOrderAddressDao;
 import com.cos.core.dao.order.IOrderDetailDao;
 import com.cos.core.dao.order.IOrderHistoryDao;
 import com.cos.core.dao.order.IOrderItemDao;
 import com.cos.core.dao.order.IOrderStatusDao;
+import com.cos.core.dao.post.IPostDao;
 import com.cos.core.dao.product.IBrandDao;
 import com.cos.core.dao.product.ICategoryDao;
 import com.cos.core.dao.product.IDiscountDao;
 import com.cos.core.dao.product.IProductStatusDao;
 import com.cos.core.dao.product.IProductTypeDao;
+import com.cos.core.dao.rating.IRatingDao;
+import com.cos.core.dao.review.IReviewDao;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.dao.user.IUserAddressDao;
 import com.cos.core.dao.user.IUserDetailDao;
 import com.cos.core.dao.user.IUserPaymentDao;
 import com.cos.core.dao.user.IUserRoleDao;
-import com.cos.core.transaction.BasicTransactionManager;
-import com.cos.core.transaction.ITransactionManager;
+import com.cos.core.dao.viewed.IViewedDao;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
@@ -345,4 +354,77 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         Assertions.assertFalse(shopList.isEmpty());
 
     }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/post/createExpectedPostSet.xml")
+    void postDaoBeanTest() {
+        IPostDao postDao = context.getBean(IPostDao.class);
+        Post post = new Post();
+
+        post.setAuthorName("test");
+        post.setAuthorEmail("test@gmail.com");
+        postDao.saveEntity(post);
+        List<Post> postList =
+                postDao.getEntityListBySQLQuery("select * from post s;");
+        Assertions.assertFalse(postList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/rating/createExpectedRatingSet.xml")
+    void ratingDaoBeanTest() {
+        IRatingDao ratingDao = context.getBean(IRatingDao.class);
+        Rating rating = new Rating();
+        rating.setRatingEnum(RateEnum.FIVE);
+        ratingDao.saveEntity(rating);
+        List<Rating> ratingList =
+                ratingDao.getEntityListBySQLQuery("select * from rating r;");
+        Assertions.assertFalse(ratingList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/liked/createExpectedLikedSet.xml")
+    void likedDaoBeanTest() {
+        ILikedDao likedDao = context.getBean(ILikedDao.class);
+        Liked liked = new Liked();
+        liked.setDateOfCreate(1693179505328L);
+        likedDao.saveEntity(liked);
+        List<Liked> ratingList =
+                likedDao.getEntityListBySQLQuery("select * from liked l;");
+        Assertions.assertFalse(ratingList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/review/createExpectedReviewSet.xml")
+    void reviewDaoBeanTest() {
+        IReviewDao reviewDao = context.getBean(IReviewDao.class);
+        Review review = new Review();
+        review.setDateOfCreate(1693179505328L);
+        reviewDao.saveEntity(review);
+        List<Review> reviewList =
+                reviewDao.getEntityListBySQLQuery("select * from review r;");
+        Assertions.assertFalse(reviewList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/viewed/createExpectedViewedSet.xml")
+    void viewedDaoBeanTest() {
+        IViewedDao viewedDao = context.getBean(IViewedDao.class);
+        Viewed viewed = new Viewed();
+        viewed.setDateOfCreate(1693179505328L);
+        viewedDao.saveEntity(viewed);
+        List<Viewed> viewedList =
+                viewedDao.getEntityListBySQLQuery("select * from viewed v;");
+        Assertions.assertFalse(viewedList.isEmpty());
+
+    }
+
 }

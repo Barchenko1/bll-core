@@ -70,6 +70,11 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
         dataSource = getTenantHikariDataSource();
         connectionHolder = dataSource::getConnection;
+
+        System.out.println("//////////////////////////////");
+        System.out.println(context.getBeanDefinitionNames().length);
+        Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println);
+        System.out.println("//////////////////////////////");
     }
 
     //user beans

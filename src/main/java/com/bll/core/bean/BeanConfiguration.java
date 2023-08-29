@@ -16,7 +16,6 @@ import com.core.im.tenant.modal.order.OrderDetail;
 import com.core.im.tenant.modal.order.OrderHistory;
 import com.core.im.tenant.modal.order.OrderItem;
 import com.core.im.tenant.modal.order.OrderStatus;
-import com.core.im.tenant.modal.post.Comment;
 import com.core.im.tenant.modal.post.Post;
 import com.core.im.tenant.modal.product.Brand;
 import com.core.im.tenant.modal.product.Category;
@@ -271,13 +270,6 @@ public class BeanConfiguration {
         IProductStatusDao productStatusDao = new BasicProductStatusDao(sessionFactory);
         productStatusDao.setClazz(ProductStatus.class);
         return productStatusDao;
-    }
-
-    @Bean
-    public ICommentDao commentDao(SessionFactory sessionFactory) {
-        ICommentDao commentDao = new BasicCommentDao(sessionFactory);
-        commentDao.setClazz(Comment.class);
-        return commentDao;
     }
 
     @Bean

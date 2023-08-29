@@ -62,36 +62,31 @@ public class ConstantBeanTest extends AbstractBeanTest {
 
     @Test
     void categoryConstantDaoBeanTest() {
-        Map<String, Category> categoryMap =
-                (Map<String, Category>) context.getBean("categoryMap");
+        Map<String, Category> categoryMap = context.getBean("categoryMap", Map.class);
         Assertions.assertFalse(categoryMap.isEmpty());
     }
 
     @Test
     void orderStatusConstantDaoBeanTest() {
-        Map<OrderStatusEnum, OrderStatus> orderStatusMap =
-                (Map<OrderStatusEnum, OrderStatus>) context.getBean("orderStatusMap");
+        Map<OrderStatusEnum, OrderStatus> orderStatusMap = context.getBean("orderStatusMap", Map.class);
         Assertions.assertFalse(orderStatusMap.isEmpty());
     }
 
     @Test
     void productStatusConstantDaoBeanTest() {
-        Map<ProductStatusEnum, ProductStatus> productStatusMap =
-                (Map<ProductStatusEnum, ProductStatus>) context.getBean("productStatusMap");
+        Map<ProductStatusEnum, ProductStatus> productStatusMap = context.getBean("productStatusMap", Map.class);
         Assertions.assertFalse(productStatusMap.isEmpty());
     }
 
     @Test
     void productTypeConstantDaoBeanTest() {
-        Map<String, ProductType> productTypeMap =
-                (Map<String, ProductType>) context.getBean("productTypeMap");
+        Map<String, ProductType> productTypeMap = context.getBean("productTypeMap", Map.class);
         Assertions.assertFalse(productTypeMap.isEmpty());
     }
 
     @Test
     void ratingConstantDaoBeanTest() {
-        Map<RateEnum, Rating> ratingMap =
-                (Map<RateEnum, Rating>) context.getBean("ratingMap");
+        Map<RateEnum, Rating> ratingMap = context.getBean("ratingMap", Map.class);
         Assertions.assertFalse(ratingMap.isEmpty());
     }
 

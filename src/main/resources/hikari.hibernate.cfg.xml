@@ -44,11 +44,10 @@
         <mapping class="com.core.im.tenant.modal.post.Comment" />
         <mapping class="com.core.im.tenant.modal.post.Post" />
 
-        <mapping class="com.core.im.tenant.modal.shop.ShopAddress" />
-        <mapping class="com.core.im.tenant.modal.store.StoreAddress" />
+        <mapping class="com.core.im.tenant.modal.business.BusinessAddress" />
 
-        <mapping class="com.core.im.tenant.modal.store.Store" />
-        <mapping class="com.core.im.tenant.modal.shop.Shop" />
+        <mapping class="com.core.im.tenant.modal.business.Store" />
+        <mapping class="com.core.im.tenant.modal.business.Shop" />
 
         <mapping class="com.core.im.tenant.modal.option.OptionGroup" />
         <mapping class="com.core.im.tenant.modal.option.Option" />

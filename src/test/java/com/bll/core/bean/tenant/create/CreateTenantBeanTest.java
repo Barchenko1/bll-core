@@ -2,23 +2,50 @@ package com.bll.core.bean.tenant.create;
 
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
-import com.core.im.tenant.constant.*;
+import com.core.im.tenant.constant.BrandEnum;
+import com.core.im.tenant.constant.CategoryEnum;
+import com.core.im.tenant.constant.OrderStatusEnum;
+import com.core.im.tenant.constant.ProductStatusEnum;
+import com.core.im.tenant.constant.ProductTypeEnum;
+import com.core.im.tenant.constant.RoleEnum;
+import com.core.im.tenant.modal.business.BusinessAddress;
+import com.core.im.tenant.modal.business.Shop;
+import com.core.im.tenant.modal.business.Store;
 import com.core.im.tenant.modal.order.OrderAddress;
 import com.core.im.tenant.modal.order.OrderDetail;
+import com.core.im.tenant.modal.order.OrderHistory;
+import com.core.im.tenant.modal.order.OrderItem;
 import com.core.im.tenant.modal.order.OrderStatus;
-import com.core.im.tenant.modal.product.*;
+import com.core.im.tenant.modal.product.Brand;
+import com.core.im.tenant.modal.product.Category;
+import com.core.im.tenant.modal.product.Discount;
+import com.core.im.tenant.modal.product.ProductStatus;
+import com.core.im.tenant.modal.product.ProductType;
 import com.core.im.tenant.modal.user.AppUser;
 import com.core.im.tenant.modal.user.UserAddress;
 import com.core.im.tenant.modal.user.UserDetail;
+import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
+import com.cos.core.dao.business.IBusinessAddressDao;
+import com.cos.core.dao.business.IShopDao;
+import com.cos.core.dao.business.IStoreDao;
 import com.cos.core.dao.order.IOrderAddressDao;
 import com.cos.core.dao.order.IOrderDetailDao;
+import com.cos.core.dao.order.IOrderHistoryDao;
+import com.cos.core.dao.order.IOrderItemDao;
 import com.cos.core.dao.order.IOrderStatusDao;
-import com.cos.core.dao.product.*;
+import com.cos.core.dao.product.IBrandDao;
+import com.cos.core.dao.product.ICategoryDao;
+import com.cos.core.dao.product.IDiscountDao;
+import com.cos.core.dao.product.IProductStatusDao;
+import com.cos.core.dao.product.IProductTypeDao;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.dao.user.IUserAddressDao;
 import com.cos.core.dao.user.IUserDetailDao;
+import com.cos.core.dao.user.IUserPaymentDao;
 import com.cos.core.dao.user.IUserRoleDao;
+import com.cos.core.transaction.BasicTransactionManager;
+import com.cos.core.transaction.ITransactionManager;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
@@ -30,6 +57,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(DBUnitExtension.class)
@@ -103,6 +131,20 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
                 userDetailDao.getEntityListBySQLQuery("select * from user_detail u;");
         Assertions.assertFalse(userDetailList.isEmpty());
         Assertions.assertEquals("test", userDetailList.get(0).getFirstName());
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/user/createExpectedUserPaymentSet.xml")
+    void userPaymentDaoBeanTest() {
+        IUserPaymentDao userPaymentDao = context.getBean(IUserPaymentDao.class);
+        UserPayment userPayment = new UserPayment();
+        userPayment.setCartNumber("123");
+        userPaymentDao.saveEntity(userPayment);
+        List<UserPayment> userPaymentList =
+                userPaymentDao.getEntityListBySQLQuery("select * from user_payment u;");
+        Assertions.assertFalse(userPaymentList.isEmpty());
+        Assertions.assertEquals("123", userPaymentList.get(0).getCartNumber());
     }
 
     //product beans
@@ -225,27 +267,77 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     }
 
     //to do
-//    @Test
-//    @DataSet(cleanBefore = true, cleanAfter = true)
-//    void orderItemDaoBeanTest() {
-//        IOrderDao<OrderItem> orderDao = context.getBean(IOrderDao.class);
-//        OrderItem orderItem = new OrderItem();
-//        orderDao.saveEntity(orderItem);
-//        List<OrderItem> orderItemList = orderDao.getEntityListBySQLQuery("select * from order_item o;");
-//        Assertions.assertFalse(orderItemList.isEmpty());
-//
-//    }
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderItemSet.xml")
+    void orderItemDaoBeanTest() {
+        IOrderItemDao orderDao = context.getBean(IOrderItemDao.class);
+        OrderItem orderItem = new OrderItem();
+        orderItem.setDateOfCreate(1693179505328L);
+        orderDao.saveEntity(orderItem);
+        List<OrderItem> orderItemList = orderDao.getEntityListBySQLQuery("select * from order_item o;");
+        Assertions.assertFalse(orderItemList.isEmpty());
 
-//    @Test
-//    @DataSet(cleanBefore = true, cleanAfter = true)
-//    void orderHistoryDaoBeanTest() {
-//        IOrderHistoryDao<OrderHistory> orderHistoryDao = context.getBean(IOrderHistoryDao.class);
-//        OrderHistory orderHistory = new OrderHistory();
-//        orderHistory.setDataOfOrder(System.currentTimeMillis());
-//        orderHistoryDao.saveEntity(orderHistory);
-//        List<OrderHistory> productTypeList =
-//                orderHistoryDao.getEntityListBySQLQuery("select * from order_history o;");
-//        Assertions.assertFalse(productTypeList.isEmpty());
-//
-//    }
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderHistorySet.xml")
+    void orderHistoryDaoBeanTest() {
+        IOrderHistoryDao orderHistoryDao = context.getBean(IOrderHistoryDao.class);
+        OrderHistory orderHistory = new OrderHistory();
+        orderHistory.setDateOfCreate(1693179505328L);
+        orderHistoryDao.saveEntity(orderHistory);
+        List<OrderHistory> orderHistoryList =
+                orderHistoryDao.getEntityListBySQLQuery("select * from order_history o;");
+        Assertions.assertFalse(orderHistoryList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/business/createExpectedBusinessAddressSet.xml")
+    void businessAddressDaoBeanTest() {
+        IBusinessAddressDao businessAddressDao = context.getBean(IBusinessAddressDao.class);
+        BusinessAddress businessAddress = new BusinessAddress();
+        businessAddress.setApartmentNumber(1);
+        businessAddress.setBuilding(1);
+        businessAddress.setFlor(1);
+        businessAddress.setStreet("Some street");
+        businessAddressDao.saveEntity(businessAddress);
+        List<BusinessAddress> businessAddressList =
+                businessAddressDao.getEntityListBySQLQuery("select * from business_address b;");
+        Assertions.assertFalse(businessAddressList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/business/createExpectedShopSet.xml")
+    void shopDaoBeanTest() {
+        IShopDao shopDao = context.getBean(IShopDao.class);
+        Shop shop = new Shop();
+
+        shop.setName("test");
+        shopDao.saveEntity(shop);
+        List<Shop> shopList =
+                shopDao.getEntityListBySQLQuery("select * from shop s;");
+        Assertions.assertFalse(shopList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/business/createExpectedStoreSet.xml")
+    void storeDaoBeanTest() {
+        IStoreDao storeDao = context.getBean(IStoreDao.class);
+        Store store = new Store();
+
+        store.setName("test");
+        storeDao.saveEntity(store);
+        List<Store> shopList =
+                storeDao.getEntityListBySQLQuery("select * from store s;");
+        Assertions.assertFalse(shopList.isEmpty());
+
+    }
 }

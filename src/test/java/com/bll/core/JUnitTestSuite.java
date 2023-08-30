@@ -9,6 +9,10 @@ import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
 @Suite
 @Execution(CONCURRENT)
 //@SelectClasses({CreateOrgBeanTest.class, CreateTenantBeanTest.class})
-@SelectPackages({"com.bll.core.bean.tenant.create", "com.bll.core.bean.org.create", "com.bll.core.bean.transaction"})
+@SelectPackages({
+        "com.bll.core.bean.constant",
+        "com.bll.core.bean.tenant.create",
+        "com.bll.core.bean.org.create",
+        "com.bll.core.bean.transaction"})
 class JUnitTestSuite {
 }

@@ -4,9 +4,11 @@ import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
 import com.bll.core.bean.ConstantBeanConfiguration;
 import com.bll.core.util.TestUtil;
+import com.core.im.tenant.constant.OptionGroupEnum;
 import com.core.im.tenant.constant.OrderStatusEnum;
 import com.core.im.tenant.constant.ProductStatusEnum;
 import com.core.im.tenant.constant.RateEnum;
+import com.core.im.tenant.modal.option.OptionGroup;
 import com.core.im.tenant.modal.order.OrderStatus;
 import com.core.im.tenant.modal.product.Brand;
 import com.core.im.tenant.modal.product.Category;
@@ -16,23 +18,15 @@ import com.core.im.tenant.modal.product.Rating;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.sql.DataSource;
-import java.io.InputStream;
 import java.util.Map;
-
-import static org.apache.commons.dbcp2.BasicDataSourceFactory.createDataSource;
 
 @ExtendWith({DBUnitExtension.class})
 @DataSet(cleanAfter = true)
@@ -49,6 +43,7 @@ public class ConstantBeanTest extends AbstractBeanTest {
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initBrandDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initRatingDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initProductStatusDataSet.xml");
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/constant/initOptionGroupDataSet.xml");
 
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class, ConstantBeanConfiguration.class);
         sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
@@ -88,6 +83,12 @@ public class ConstantBeanTest extends AbstractBeanTest {
     void ratingConstantDaoBeanTest() {
         Map<RateEnum, Rating> ratingMap = context.getBean("ratingMap", Map.class);
         Assertions.assertFalse(ratingMap.isEmpty());
+    }
+
+    @Test
+    void optionGroupConstantDaoBeanTest() {
+        Map<OptionGroupEnum, OptionGroup> optionGroupMap = context.getBean("optionGroupMap", Map.class);
+        Assertions.assertFalse(optionGroupMap.isEmpty());
     }
 
 }

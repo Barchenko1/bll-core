@@ -4,15 +4,19 @@ import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
 import com.core.im.tenant.constant.BrandEnum;
 import com.core.im.tenant.constant.CategoryEnum;
+import com.core.im.tenant.constant.OptionGroupEnum;
 import com.core.im.tenant.constant.OrderStatusEnum;
 import com.core.im.tenant.constant.ProductStatusEnum;
 import com.core.im.tenant.constant.ProductTypeEnum;
 import com.core.im.tenant.constant.RateEnum;
 import com.core.im.tenant.constant.RoleEnum;
+import com.core.im.tenant.modal.bucket.Bucket;
 import com.core.im.tenant.modal.business.BusinessAddress;
 import com.core.im.tenant.modal.business.Shop;
 import com.core.im.tenant.modal.business.Store;
 import com.core.im.tenant.modal.liked.Liked;
+import com.core.im.tenant.modal.option.Option;
+import com.core.im.tenant.modal.option.OptionGroup;
 import com.core.im.tenant.modal.order.OrderAddress;
 import com.core.im.tenant.modal.order.OrderDetail;
 import com.core.im.tenant.modal.order.OrderHistory;
@@ -22,6 +26,7 @@ import com.core.im.tenant.modal.post.Post;
 import com.core.im.tenant.modal.product.Brand;
 import com.core.im.tenant.modal.product.Category;
 import com.core.im.tenant.modal.product.Discount;
+import com.core.im.tenant.modal.product.Product;
 import com.core.im.tenant.modal.product.ProductStatus;
 import com.core.im.tenant.modal.product.ProductType;
 import com.core.im.tenant.modal.product.Rating;
@@ -32,10 +37,13 @@ import com.core.im.tenant.modal.user.UserDetail;
 import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
 import com.core.im.tenant.modal.viewed.Viewed;
+import com.cos.core.dao.bucket.IBucketDao;
 import com.cos.core.dao.business.IBusinessAddressDao;
 import com.cos.core.dao.business.IShopDao;
 import com.cos.core.dao.business.IStoreDao;
 import com.cos.core.dao.liked.ILikedDao;
+import com.cos.core.dao.option.IOptionDao;
+import com.cos.core.dao.option.IOptionGroupDao;
 import com.cos.core.dao.order.IOrderAddressDao;
 import com.cos.core.dao.order.IOrderDetailDao;
 import com.cos.core.dao.order.IOrderHistoryDao;
@@ -45,6 +53,7 @@ import com.cos.core.dao.post.IPostDao;
 import com.cos.core.dao.product.IBrandDao;
 import com.cos.core.dao.product.ICategoryDao;
 import com.cos.core.dao.product.IDiscountDao;
+import com.cos.core.dao.product.IProductDao;
 import com.cos.core.dao.product.IProductStatusDao;
 import com.cos.core.dao.product.IProductTypeDao;
 import com.cos.core.dao.rating.IRatingDao;
@@ -229,6 +238,21 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
                 productStatusDao.getEntityListBySQLQuery("select * from product_status p;");
         Assertions.assertFalse(productStatusList.isEmpty());
         Assertions.assertEquals(ProductStatusEnum.NEW, productStatusList.get(0).getName());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/product/createExpectedProductSet.xml")
+    void productDaoBeanTest() {
+        IProductDao productDao = context.getBean(IProductDao.class);
+        Product product = new Product();
+        product.setName("test");
+        product.setDateOfCreate(1693179505328L);
+        productDao.saveEntity(product);
+        List<Viewed> viewedList =
+                productDao.getEntityListBySQLQuery("select * from product p;");
+        Assertions.assertFalse(viewedList.isEmpty());
 
     }
 
@@ -426,5 +450,45 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         Assertions.assertFalse(viewedList.isEmpty());
 
     }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/bucket/createExpectedBucketSet.xml")
+    void bucketDaoBeanTest() {
+        IBucketDao bucketDao = context.getBean(IBucketDao.class);
+        Bucket bucket = new Bucket();
+        bucket.setDateOfLastUpdate(1693179505328L);
+        bucketDao.saveEntity(bucket);
+        List<Bucket> bucketList =
+                bucketDao.getEntityListBySQLQuery("select * from bucket b;");
+        Assertions.assertFalse(bucketList.isEmpty());
+
+    }
+
+    @Test
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/create/option/createExpectedOptionGroupSet.xml")
+    void optionGroupDaoBeanTest() {
+        IOptionGroupDao optionGroupDao = context.getBean(IOptionGroupDao.class);
+        OptionGroup optionGroup = new OptionGroup();
+        optionGroup.setOptionGroup(OptionGroupEnum.COLOR);
+        optionGroupDao.saveEntity(optionGroup);
+        List<OptionGroup> optionGroupList =
+                optionGroupDao.getEntityListBySQLQuery("select * from option_group o;");
+        Assertions.assertFalse(optionGroupList.isEmpty());
+    }
+
+//    @Test
+//    @DataSet(cleanBefore = true, cleanAfter = true)
+//    @ExpectedDataSet("/data/expected/create/option/createExpectedProductSet.xml")
+//    void optionDaoBeanTest() {
+//        IOptionDao optionDao = context.getBean(IOptionDao.class);
+//        Option option = new Option();
+//        option.set
+//        optionDao.saveEntity(option);
+//        List<Option> optionList =
+//                optionDao.getEntityListBySQLQuery("select * from option o;");
+//        Assertions.assertFalse(optionList.isEmpty());
+//    }
 
 }

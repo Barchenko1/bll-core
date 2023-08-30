@@ -160,7 +160,7 @@ public class UpdateTenantBeanTest extends AbstractBeanTest {
     }
 
     @Test
-    @DataSet(cleanBefore = true, cleanAfter = true)
+    @DataSet(value = "/data/initclientdb/user/createExpectedUserPaymentSet.xml", cleanBefore = true, cleanAfter = true)
     @ExpectedDataSet("/data/expected/create/user/createExpectedUserPaymentSet.xml")
     void userPaymentDaoBeanTest() {
         IUserPaymentDao userPaymentDao = context.getBean(IUserPaymentDao.class);

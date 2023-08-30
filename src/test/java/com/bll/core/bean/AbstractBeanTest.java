@@ -27,7 +27,6 @@ import static com.bll.core.util.QueryPattern.SELECT_ALL;
 import static com.bll.core.util.QueryPattern.SELECT_BY_PARAM;
 
 public abstract class AbstractBeanTest {
-    protected static final long time = 1693179505328L;
 
     protected static SessionFactory sessionFactory;
     protected static DataSource dataSource;
@@ -38,10 +37,6 @@ public abstract class AbstractBeanTest {
         context.close();
         TestUtil.cleanUp(sessionFactory);
         dataSource.getConnection().close();
-    }
-
-    public static void prepareTestEntityDb(DataSource dataSource) {
-        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/dataset/initDataSet.xml");
     }
 
     protected static HikariDataSource getTenantHikariDataSource() {

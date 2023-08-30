@@ -25,6 +25,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
+import static com.bll.core.util.TestConstant.NAME;
+
 @ExtendWith({DBUnitExtension.class})
 public class TransactionBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
@@ -49,22 +52,22 @@ public class TransactionBeanTest extends AbstractBeanTest {
         ITenantConfigDao tenantConfigDao = context.getBean(ITenantConfigDao.class);
 
         Organization organization = new Organization();
-        organization.setClientName("test");
-        organization.setDateOfCreate(time);
+        organization.setClientName(NAME);
+        organization.setDateOfCreate(DATE_OF_CREATE);
 
         OrgUser orgUser = new OrgUser();
-        orgUser.setUsername("test");
-        orgUser.setEmail("test");
-        orgUser.setPassword("test");
+        orgUser.setUsername(NAME);
+        orgUser.setEmail(NAME);
+        orgUser.setPassword(NAME);
         orgUser.setOrganizationList(Arrays.asList(organization));
 
 
         TenantConfiguration tenantConfiguration = new TenantConfiguration();
-        tenantConfiguration.setDateOfCreate(time);
+        tenantConfiguration.setDateOfCreate(DATE_OF_CREATE);
 
         Tenant tenant = new Tenant();
-        tenant.setName("test");
-        tenant.setDateOfCreate(time);
+        tenant.setName(NAME);
+        tenant.setDateOfCreate(DATE_OF_CREATE);
         tenant.setOrganizationList(Arrays.asList(organization));
         tenant.setTenantConfigurationList(Arrays.asList(tenantConfiguration));
 

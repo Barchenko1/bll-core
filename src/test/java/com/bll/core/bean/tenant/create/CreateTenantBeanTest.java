@@ -78,6 +78,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Arrays;
 import java.util.List;
 
+import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
+import static com.bll.core.util.TestConstant.EMAIL;
+import static com.bll.core.util.TestConstant.NAME;
+import static com.bll.core.util.TestConstant.PASSWORD;
+
 @ExtendWith(DBUnitExtension.class)
 public class CreateTenantBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
@@ -102,9 +107,9 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void appUserDaoBeanTest() {
         IAppUserDao appUserDao = context.getBean(IAppUserDao.class);
         AppUser appUser = new AppUser();
-        appUser.setEmail("test@gmail.com");
-        appUser.setUsername("test");
-        appUser.setPassword("password");
+        appUser.setEmail(EMAIL);
+        appUser.setUsername(NAME);
+        appUser.setPassword(PASSWORD);
         appUserDao.saveEntity(appUser);
 
         List<AppUser> appUserList = appUserDao.getEntityListBySQLQuery("select * from app_user a;");
@@ -148,12 +153,12 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void userDetailDaoBeanTest() {
         IUserDetailDao userDetailDao = context.getBean(IUserDetailDao.class);
         UserDetail userDetail = new UserDetail();
-        userDetail.setFirstName("test");
+        userDetail.setFirstName(NAME);
         userDetailDao.saveEntity(userDetail);
         List<UserDetail> userDetailList =
                 userDetailDao.getEntityListBySQLQuery("select * from user_detail u;");
         Assertions.assertFalse(userDetailList.isEmpty());
-        Assertions.assertEquals("test", userDetailList.get(0).getFirstName());
+        Assertions.assertEquals(NAME, userDetailList.get(0).getFirstName());
     }
 
     @Test
@@ -247,8 +252,8 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void productDaoBeanTest() {
         IProductDao productDao = context.getBean(IProductDao.class);
         Product product = new Product();
-        product.setName("test");
-        product.setDateOfCreate(1693179505328L);
+        product.setName(NAME);
+        product.setDateOfCreate(DATE_OF_CREATE);
         productDao.saveEntity(product);
         List<Viewed> viewedList =
                 productDao.getEntityListBySQLQuery("select * from product p;");
@@ -269,7 +274,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         orderAddress.setStreet("Some street");
         orderAddressDao.saveEntity(orderAddress);
         List<OrderAddress> orderAddressList =
-                orderAddressDao.getEntityListBySQLQuery("select * from order_address a;");
+                orderAddressDao.getEntityListBySQLQuery("select * from order_address o;");
         Assertions.assertFalse(orderAddressList.isEmpty());
         Assertions.assertEquals("Some street", orderAddressList.get(0).getStreet());
 
@@ -281,7 +286,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void orderDetailDaoBeanTest() {
         IOrderDetailDao orderDetailDao = context.getBean(IOrderDetailDao.class);
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setFirstName("test");
+        orderDetail.setFirstName(NAME);
         orderDetailDao.saveEntity(orderDetail);
         List<OrderDetail> orderDetailList =
                 orderDetailDao.getEntityListBySQLQuery("select * from order_detail o;");
@@ -311,7 +316,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void orderItemDaoBeanTest() {
         IOrderItemDao orderDao = context.getBean(IOrderItemDao.class);
         OrderItem orderItem = new OrderItem();
-        orderItem.setDateOfCreate(1693179505328L);
+        orderItem.setDateOfCreate(DATE_OF_CREATE);
         orderDao.saveEntity(orderItem);
         List<OrderItem> orderItemList = orderDao.getEntityListBySQLQuery("select * from order_item o;");
         Assertions.assertFalse(orderItemList.isEmpty());
@@ -324,7 +329,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void orderHistoryDaoBeanTest() {
         IOrderHistoryDao orderHistoryDao = context.getBean(IOrderHistoryDao.class);
         OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setDateOfCreate(1693179505328L);
+        orderHistory.setDateOfCreate(DATE_OF_CREATE);
         orderHistoryDao.saveEntity(orderHistory);
         List<OrderHistory> orderHistoryList =
                 orderHistoryDao.getEntityListBySQLQuery("select * from order_history o;");
@@ -356,7 +361,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         IShopDao shopDao = context.getBean(IShopDao.class);
         Shop shop = new Shop();
 
-        shop.setName("test");
+        shop.setName(NAME);
         shopDao.saveEntity(shop);
         List<Shop> shopList =
                 shopDao.getEntityListBySQLQuery("select * from shop s;");
@@ -371,7 +376,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         IStoreDao storeDao = context.getBean(IStoreDao.class);
         Store store = new Store();
 
-        store.setName("test");
+        store.setName(NAME);
         storeDao.saveEntity(store);
         List<Store> shopList =
                 storeDao.getEntityListBySQLQuery("select * from store s;");
@@ -385,9 +390,8 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void postDaoBeanTest() {
         IPostDao postDao = context.getBean(IPostDao.class);
         Post post = new Post();
-
-        post.setAuthorName("test");
-        post.setAuthorEmail("test@gmail.com");
+        post.setAuthorName(NAME);
+        post.setAuthorEmail(EMAIL);
         postDao.saveEntity(post);
         List<Post> postList =
                 postDao.getEntityListBySQLQuery("select * from post s;");
@@ -415,7 +419,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void likedDaoBeanTest() {
         ILikedDao likedDao = context.getBean(ILikedDao.class);
         Liked liked = new Liked();
-        liked.setDateOfCreate(1693179505328L);
+        liked.setDateOfCreate(DATE_OF_CREATE);
         likedDao.saveEntity(liked);
         List<Liked> ratingList =
                 likedDao.getEntityListBySQLQuery("select * from liked l;");
@@ -429,7 +433,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void reviewDaoBeanTest() {
         IReviewDao reviewDao = context.getBean(IReviewDao.class);
         Review review = new Review();
-        review.setDateOfCreate(1693179505328L);
+        review.setDateOfCreate(DATE_OF_CREATE);
         reviewDao.saveEntity(review);
         List<Review> reviewList =
                 reviewDao.getEntityListBySQLQuery("select * from review r;");
@@ -443,7 +447,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void viewedDaoBeanTest() {
         IViewedDao viewedDao = context.getBean(IViewedDao.class);
         Viewed viewed = new Viewed();
-        viewed.setDateOfCreate(1693179505328L);
+        viewed.setDateOfCreate(DATE_OF_CREATE);
         viewedDao.saveEntity(viewed);
         List<Viewed> viewedList =
                 viewedDao.getEntityListBySQLQuery("select * from viewed v;");
@@ -457,7 +461,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void bucketDaoBeanTest() {
         IBucketDao bucketDao = context.getBean(IBucketDao.class);
         Bucket bucket = new Bucket();
-        bucket.setDateOfLastUpdate(1693179505328L);
+        bucket.setDateOfLastUpdate(DATE_OF_CREATE);
         bucketDao.saveEntity(bucket);
         List<Bucket> bucketList =
                 bucketDao.getEntityListBySQLQuery("select * from bucket b;");

@@ -7,4 +7,6 @@ public interface TestConstant {
     String NAME = "test";
     String PASSWORD = "password";
     String EMAIL = "test@mail.com";
+    String CART_NUMBER = "123";
+    String SOME_STRING = "Some string";
 }

@@ -78,10 +78,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Arrays;
 import java.util.List;
 
+import static com.bll.core.util.TestConstant.CART_NUMBER;
 import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
 import static com.bll.core.util.TestConstant.EMAIL;
 import static com.bll.core.util.TestConstant.NAME;
 import static com.bll.core.util.TestConstant.PASSWORD;
+import static com.bll.core.util.TestConstant.SOME_STRING;
 
 @ExtendWith(DBUnitExtension.class)
 public class CreateTenantBeanTest extends AbstractBeanTest {
@@ -139,11 +141,11 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         userAddress.setFlor(9);
         userAddress.setBuilding(1);
         userAddress.setApartmentNumber(111);
-        userAddress.setStreet("Some Name");
+        userAddress.setStreet(SOME_STRING);
         userAddressDao.saveEntity(userAddress);
         List<UserAddress> userAddressList = userAddressDao.getEntityListBySQLQuery("select * from user_address a;");
         Assertions.assertFalse(userAddressList.isEmpty());
-        Assertions.assertEquals("Some Name", userAddressList.get(0).getStreet());
+        Assertions.assertEquals(SOME_STRING, userAddressList.get(0).getStreet());
 
     }
 
@@ -167,12 +169,12 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
     void userPaymentDaoBeanTest() {
         IUserPaymentDao userPaymentDao = context.getBean(IUserPaymentDao.class);
         UserPayment userPayment = new UserPayment();
-        userPayment.setCartNumber("123");
+        userPayment.setCartNumber(CART_NUMBER);
         userPaymentDao.saveEntity(userPayment);
         List<UserPayment> userPaymentList =
                 userPaymentDao.getEntityListBySQLQuery("select * from user_payment u;");
         Assertions.assertFalse(userPaymentList.isEmpty());
-        Assertions.assertEquals("123", userPaymentList.get(0).getCartNumber());
+        Assertions.assertEquals(CART_NUMBER, userPaymentList.get(0).getCartNumber());
     }
 
     //product beans
@@ -271,12 +273,12 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         orderAddress.setApartmentNumber(1);
         orderAddress.setBuilding(1);
         orderAddress.setFlor(1);
-        orderAddress.setStreet("Some street");
+        orderAddress.setStreet(SOME_STRING);
         orderAddressDao.saveEntity(orderAddress);
         List<OrderAddress> orderAddressList =
                 orderAddressDao.getEntityListBySQLQuery("select * from order_address o;");
         Assertions.assertFalse(orderAddressList.isEmpty());
-        Assertions.assertEquals("Some street", orderAddressList.get(0).getStreet());
+        Assertions.assertEquals(SOME_STRING, orderAddressList.get(0).getStreet());
 
     }
 
@@ -346,7 +348,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
         businessAddress.setApartmentNumber(1);
         businessAddress.setBuilding(1);
         businessAddress.setFlor(1);
-        businessAddress.setStreet("Some street");
+        businessAddress.setStreet(SOME_STRING);
         businessAddressDao.saveEntity(businessAddress);
         List<BusinessAddress> businessAddressList =
                 businessAddressDao.getEntityListBySQLQuery("select * from business_address b;");

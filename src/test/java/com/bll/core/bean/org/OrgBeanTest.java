@@ -1,4 +1,4 @@
-package com.bll.core.bean.org.create;
+package com.bll.core.bean.org;
 
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
@@ -24,7 +24,7 @@ import static com.bll.core.util.TestConstant.NAME;
 import static com.bll.core.util.TestUtil.getQuery;
 
 @ExtendWith({DBUnitExtension.class})
-public class CreateOrgBeanTest extends AbstractBeanTest {
+public class OrgBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
 
     @BeforeAll

@@ -3,7 +3,6 @@ package com.bll.core.bean.tenant.update;
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
 import com.bll.core.util.TestUtil;
-import com.core.im.org.modal.Organization;
 import com.core.im.tenant.constant.BrandEnum;
 import com.core.im.tenant.constant.CategoryEnum;
 import com.core.im.tenant.constant.OptionGroupEnum;

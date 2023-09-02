@@ -3,6 +3,7 @@ package com.bll.core.bean;
 import com.core.im.tenant.constant.OptionGroupEnum;
 import com.core.im.tenant.constant.OrderStatusEnum;
 import com.core.im.tenant.constant.ProductStatusEnum;
+import com.core.im.tenant.constant.RoleEnum;
 import com.core.im.tenant.modal.option.OptionGroup;
 import com.core.im.tenant.modal.order.OrderStatus;
 import com.core.im.tenant.modal.product.Brand;
@@ -10,6 +11,7 @@ import com.core.im.tenant.modal.product.Category;
 import com.core.im.tenant.modal.product.ProductStatus;
 import com.core.im.tenant.modal.product.ProductType;
 import com.core.im.tenant.modal.product.Rating;
+import com.core.im.tenant.modal.user.UserRole;
 import com.cos.core.dao.option.IOptionGroupDao;
 import com.cos.core.dao.order.IOrderStatusDao;
 import com.cos.core.dao.product.IBrandDao;
@@ -17,6 +19,8 @@ import com.cos.core.dao.product.ICategoryDao;
 import com.cos.core.dao.product.IProductStatusDao;
 import com.cos.core.dao.product.IProductTypeDao;
 import com.cos.core.dao.rating.IRatingDao;
+import com.cos.core.dao.user.IUserPaymentDao;
+import com.cos.core.dao.user.IUserRoleDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,6 +31,13 @@ import java.util.stream.Collectors;
 
 @Configuration
 public class ConstantBeanConfiguration {
+
+    @Bean
+    public Map<String, UserRole> userRoleMap(IUserRoleDao userRoleDao) {
+        List<UserRole> userRoleList = userRoleDao.getEntityListBySQLQuery("SELECT * FROM user_role u;");
+        return userRoleList.stream()
+                .collect(Collectors.toMap(UserRole::getRoleName, Function.identity(), (existing, replacement) -> existing));
+    }
 
     @Bean
     public Map<OrderStatusEnum, OrderStatus> orderStatusMap(IOrderStatusDao orderStatusDao) {

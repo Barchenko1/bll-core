@@ -15,6 +15,7 @@ import com.core.im.tenant.modal.product.Category;
 import com.core.im.tenant.modal.product.ProductStatus;
 import com.core.im.tenant.modal.product.ProductType;
 import com.core.im.tenant.modal.product.Rating;
+import com.core.im.tenant.modal.user.UserRole;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
@@ -37,6 +38,7 @@ public class ConstantBeanTest extends AbstractBeanTest {
     public static void getSessionFactory() {
         dataSource = getTenantHikariDataSource();
         connectionHolder = dataSource::getConnection;
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initUserRoleDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initCategoryDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initOrderStatusDataSet.xml");
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initProductTypeDataSet.xml");
@@ -47,6 +49,12 @@ public class ConstantBeanTest extends AbstractBeanTest {
 
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class, ConstantBeanConfiguration.class);
         sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
+    }
+
+    @Test
+    void userRoleConstantDaoBeanTest() {
+        Map<String, UserRole> userRoleMap = context.getBean("userRoleMap", Map.class);
+        Assertions.assertFalse(userRoleMap.isEmpty());
     }
 
     @Test

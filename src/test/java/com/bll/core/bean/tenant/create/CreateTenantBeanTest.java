@@ -486,7 +486,7 @@ public class CreateTenantBeanTest extends AbstractBeanTest {
 
 //    @Test
 //    @DataSet(cleanBefore = true, cleanAfter = true)
-//    @ExpectedDataSet("/data/expected/create/option/createExpectedProductSet.xml")
+//    @ExpectedDataSet("/data/expected/create/option/updatedExpectedProductSet.xml")
 //    void optionDaoBeanTest() {
 //        IOptionDao optionDao = context.getBean(IOptionDao.class);
 //        Option option = new Option();

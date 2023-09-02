@@ -61,11 +61,12 @@ public abstract class AbstractBeanTest {
         return dataSource;
     }
 
-    public static String getQuery(String table) {
-        return String.format(SELECT_ALL, table);
+    protected Object getEntity(IEntityDao entityDao, String table, String paramName, String paramValue) {
+        return entityDao.getEntityBySQLQuery(
+                String.format(SELECT_BY_PARAM, table, paramName, paramValue));
     }
 
-    protected Object getEntity(IEntityDao entityDao, String table, String paramName, String paramValue) {
+    protected Object getEntity(IEntityDao entityDao, String table, String paramName, Integer paramValue) {
         return entityDao.getEntityBySQLQuery(
                 String.format(SELECT_BY_PARAM, table, paramName, paramValue));
     }

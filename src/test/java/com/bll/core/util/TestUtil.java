@@ -10,6 +10,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import javax.sql.DataSource;
 import java.sql.Connection;
 
+import static com.bll.core.util.QueryPattern.SELECT_ALL;
+
 public final class TestUtil {
 
     private static final ResourceReader resourceReader = new ResourceReader();
@@ -33,5 +35,9 @@ public final class TestUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String getQuery(String table) {
+        return String.format(SELECT_ALL, table);
     }
 }

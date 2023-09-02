@@ -2,6 +2,8 @@ package com.bll.core.bean.tenant.update;
 
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
+import com.bll.core.util.TestUtil;
+import com.core.im.org.modal.Organization;
 import com.core.im.tenant.constant.BrandEnum;
 import com.core.im.tenant.constant.CategoryEnum;
 import com.core.im.tenant.constant.OptionGroupEnum;
@@ -66,22 +68,26 @@ import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
+import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.Arrays;
-import java.util.List;
 
 import static com.bll.core.util.TestConstant.CART_NUMBER;
+import static com.bll.core.util.TestConstant.CART_NUMBER_UPDATED;
+import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
 import static com.bll.core.util.TestConstant.EMAIL;
+import static com.bll.core.util.TestConstant.EMAIL_UPDATED;
 import static com.bll.core.util.TestConstant.NAME;
+import static com.bll.core.util.TestConstant.NAME_UPDATED;
 import static com.bll.core.util.TestConstant.PASSWORD;
+import static com.bll.core.util.TestConstant.PASSWORD_UPDATED;
 import static com.bll.core.util.TestConstant.SOME_STRING;
-import static com.bll.core.util.TestConstant.UPDATED_DATE_OF_CREATE;
+import static com.bll.core.util.TestConstant.DATE_OF_CREATE_UPDATED;
+import static com.bll.core.util.TestConstant.SOME_STRING_UPDATED;
 
 @ExtendWith(DBUnitExtension.class)
 public class UpdateTenantBeanTest extends AbstractBeanTest {
@@ -93,399 +99,425 @@ public class UpdateTenantBeanTest extends AbstractBeanTest {
         sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
         dataSource = getTenantHikariDataSource();
         connectionHolder = dataSource::getConnection;
-
-        System.out.println("//////////////////////////////");
-        System.out.println(context.getBeanDefinitionNames().length);
-        Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println);
-        System.out.println("//////////////////////////////");
     }
 
     //user beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/user/createExpectedUserSet.xml")
+    @ExpectedDataSet("/data/expected/update/user/updatedExpectedUserSet.xml")
     void appUserDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/user/appUserDataSet.xml");
+
         IAppUserDao appUserDao = context.getBean(IAppUserDao.class);
-        AppUser appUser = new AppUser();
-        appUser.setEmail(EMAIL);
-        appUser.setUsername(NAME);
-        appUser.setPassword(PASSWORD);
-        appUserDao.saveEntity(appUser);
+        AppUser appUser =
+                (AppUser) getEntity(appUserDao, "app_user", "username", NAME);
 
-        List<AppUser> appUserList = appUserDao.getEntityListBySQLQuery("select * from app_user a;");
-        Assertions.assertFalse(appUserList.isEmpty());
+        appUser.setEmail(EMAIL_UPDATED);
+        appUser.setUsername(NAME_UPDATED);
+        appUser.setPassword(PASSWORD_UPDATED);
+        appUserDao.updateEntity(appUser);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/user/createExpectedUserRoleSet.xml")
+    @ExpectedDataSet("/data/expected/update/user/updatedExpectedUserRoleSet.xml")
     void userRoleDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/user/userRoleDataSet.xml");
+
+
         IUserRoleDao userRoleDao = context.getBean(IUserRoleDao.class);
-        UserRole userRole = new UserRole();
-        userRole.setRoleEnum(RoleEnum.ROLE_USER);
-        userRoleDao.saveEntity(userRole);
-        List<UserRole> userRoleList = userRoleDao.getEntityListBySQLQuery("select * from user_role u;");
-        Assertions.assertFalse(userRoleList.isEmpty());
-        Assertions.assertEquals(RoleEnum.ROLE_USER.getValue(), userRoleList.get(0).getRoleName());
+        UserRole userRole =
+                (UserRole) getEntity(userRoleDao, "user_role", "name", "User");
+        userRole.setRoleEnum(RoleEnum.ROLE_ADMIN);
+        userRoleDao.updateEntity(userRole);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/user/createExpectedUserAddressSet.xml")
+    @ExpectedDataSet("/data/expected/update/user/updatedExpectedUserAddressSet.xml")
     void userAddressBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/user/userAddressDataSet.xml");
+
         IUserAddressDao userAddressDao = context.getBean(IUserAddressDao.class);
-        UserAddress userAddress = new UserAddress();
+        UserAddress userAddress =
+                (UserAddress) getEntity(userAddressDao, "user_address", "street", SOME_STRING);
         userAddress.setFlor(9);
         userAddress.setBuilding(1);
         userAddress.setApartmentNumber(111);
-        userAddress.setStreet(SOME_STRING);
-        userAddressDao.saveEntity(userAddress);
-        List<UserAddress> userAddressList = userAddressDao.getEntityListBySQLQuery("select * from user_address a;");
-        Assertions.assertFalse(userAddressList.isEmpty());
-        Assertions.assertEquals(SOME_STRING, userAddressList.get(0).getStreet());
+        userAddress.setStreet(SOME_STRING_UPDATED);
+        userAddressDao.updateEntity(userAddress);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/user/createExpectedUserDetailSet.xml")
+    @ExpectedDataSet("/data/expected/update/user/updatedExpectedUserDetailSet.xml")
     void userDetailDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/user/userDetailDataSet.xml");
+
         IUserDetailDao userDetailDao = context.getBean(IUserDetailDao.class);
-        UserDetail userDetail = new UserDetail();
-        userDetail.setFirstName(NAME);
-        userDetailDao.saveEntity(userDetail);
-        List<UserDetail> userDetailList =
-                userDetailDao.getEntityListBySQLQuery("select * from user_detail u;");
-        Assertions.assertFalse(userDetailList.isEmpty());
-        Assertions.assertEquals(NAME, userDetailList.get(0).getFirstName());
+        UserDetail userDetail =
+                (UserDetail) getEntity(userDetailDao, "user_detail", "firstName", NAME);
+        userDetail.setFirstName(SOME_STRING_UPDATED);
+        userDetailDao.updateEntity(userDetail);
     }
 
     @Test
-    @DataSet(value = "/data/initclientdb/user/createExpectedUserPaymentSet.xml", cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/user/createExpectedUserPaymentSet.xml")
+    @DataSet(cleanBefore = true, cleanAfter = true)
+    @ExpectedDataSet("/data/expected/update/user/updatedExpectedUserPaymentSet.xml")
     void userPaymentDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/user/userPaymentDataSet.xml");
+
         IUserPaymentDao userPaymentDao = context.getBean(IUserPaymentDao.class);
-        UserPayment userPayment = new UserPayment();
-        userPayment.setCartNumber(CART_NUMBER);
-        userPaymentDao.saveEntity(userPayment);
-        List<UserPayment> userPaymentList =
-                userPaymentDao.getEntityListBySQLQuery("select * from user_payment u;");
-        Assertions.assertFalse(userPaymentList.isEmpty());
-        Assertions.assertEquals(CART_NUMBER, userPaymentList.get(0).getCartNumber());
+        UserPayment userPayment =
+                (UserPayment) getEntity(userPaymentDao, "user_payment", "cartnumber", CART_NUMBER);
+
+        userPayment.setCartNumber(CART_NUMBER_UPDATED);
+        userPaymentDao.updateEntity(userPayment);
     }
 
     //product beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/product/createExpectedCategorySet.xml")
+    @ExpectedDataSet("/data/expected/update/product/updatedExpectedCategorySet.xml")
     void categoryDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/product/categoryDataSet.xml");
+
         ICategoryDao categoryDao = context.getBean(ICategoryDao.class);
-        Category category = new Category();
-        category.setCategoryEnum(CategoryEnum.BEAUTY_AND_HEALTH);
-        categoryDao.saveEntity(category);
-        List<Category> categoryList = categoryDao.getEntityListBySQLQuery("select * from category c;");
-        Assertions.assertFalse(categoryList.isEmpty());
-        Assertions.assertEquals(CategoryEnum.BEAUTY_AND_HEALTH.getValue(), categoryList.get(0).getName());
+        Category category =
+                (Category) getEntity(categoryDao, "category", "name", CategoryEnum.BEAUTY_AND_HEALTH.getValue());
+
+        category.setCategoryEnum(CategoryEnum.APPLIANCES);
+        categoryDao.updateEntity(category);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/product/createExpectedBrandSet.xml")
+    @ExpectedDataSet("/data/expected/update/product/updatedExpectedBrandSet.xml")
     void brandDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/product/brandDataSet.xml");
+
         IBrandDao brandDao = context.getBean(IBrandDao.class);
-        Brand brand = new Brand();
-        brand.setBrandEnum(BrandEnum.APPLE);
-        brandDao.saveEntity(brand);
-        List<Brand> brandList = brandDao.getEntityListBySQLQuery("select * from brand b;");
-        Assertions.assertFalse(brandList.isEmpty());
-        Assertions.assertEquals(BrandEnum.APPLE.getValue(), brandList.get(0).getName());
+        Brand brand =
+                (Brand) getEntity(brandDao, "brand", "name", BrandEnum.APPLE.getValue());
+
+        brand.setBrandEnum(BrandEnum.LENOVO);
+        brandDao.updateEntity(brand);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/product/createExpectedDiscountSet.xml")
+    @ExpectedDataSet("/data/expected/update/product/updatedExpectedDiscountSet.xml")
     void discountDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/product/discountDataSet.xml");
+
         IDiscountDao discountDao = context.getBean(IDiscountDao.class);
-        Discount discount = new Discount();
-        discount.setAmount(10);
-        discountDao.saveEntity(discount);
-        List<Discount> discountList = discountDao.getEntityListBySQLQuery("select * from discount d;");
-        Assertions.assertFalse(discountList.isEmpty());
+        Discount discount =
+                (Discount) getEntity(discountDao, "discount", "amount", 10L);
+
+        discount.setAmount(11);
+        discountDao.updateEntity(discount);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/product/createExpectedProductTypeSet.xml")
+    @ExpectedDataSet("/data/expected/update/product/updatedExpectedProductTypeSet.xml")
     void productTypeDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/product/productTypeDataSet.xml");
+
         IProductTypeDao productTypeDao = context.getBean(IProductTypeDao.class);
-        ProductType productType = new ProductType();
-        productType.setProductType(ProductTypeEnum.CLAUSE);
-        productTypeDao.saveEntity(productType);
-        List<ProductType> productTypeList = productTypeDao.getEntityListBySQLQuery("select * from product_type p;");
-        Assertions.assertFalse(productTypeList.isEmpty());
-        Assertions.assertEquals(ProductTypeEnum.CLAUSE.getValue(), productTypeList.get(0).getName());
+        ProductType productType =
+                (ProductType) getEntity(productTypeDao, "product_type", "name", ProductTypeEnum.CLAUSE.getValue());
+
+        productType.setProductType(ProductTypeEnum.TECHNICS);
+        productTypeDao.updateEntity(productType);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/product/createExpectedProductStatusSet.xml")
+    @ExpectedDataSet("/data/expected/update/product/updatedExpectedProductStatusSet.xml")
     void productStatusDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/product/productStatusDataSet.xml");
+
         IProductStatusDao productStatusDao = context.getBean(IProductStatusDao.class);
-        ProductStatus productStatus = new ProductStatus();
-        productStatus.setName(ProductStatusEnum.NEW);
-        productStatusDao.saveEntity(productStatus);
-        List<ProductStatus> productStatusList =
-                productStatusDao.getEntityListBySQLQuery("select * from product_status p;");
-        Assertions.assertFalse(productStatusList.isEmpty());
-        Assertions.assertEquals(ProductStatusEnum.NEW, productStatusList.get(0).getName());
+        ProductStatus productStatus =
+                (ProductStatus) getEntity(productStatusDao, "product_status", "name", ProductStatusEnum.NEW.name());
+
+        productStatus.setName(ProductStatusEnum.RUNNING_OUT);
+        productStatusDao.updateEntity(productStatus);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/product/createExpectedProductSet.xml")
+    @ExpectedDataSet("/data/expected/update/product/updatedExpectedProductSet.xml")
     void productDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/product/productDataSet.xml");
+
         IProductDao productDao = context.getBean(IProductDao.class);
-        Product product = new Product();
-        product.setName(NAME);
-        product.setDateOfCreate(UPDATED_DATE_OF_CREATE);
-        productDao.saveEntity(product);
-        List<Viewed> viewedList =
-                productDao.getEntityListBySQLQuery("select * from product p;");
-        Assertions.assertFalse(viewedList.isEmpty());
+        Product product =
+                (Product) getEntity(productDao, "product", "name", NAME);
+
+        product.setName(NAME_UPDATED);
+        product.setDateOfCreate(DATE_OF_CREATE_UPDATED);
+        productDao.updateEntity(product);
 
     }
 
     //order beans
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderAddressSet.xml")
+    @ExpectedDataSet("/data/expected/update/order/updatedExpectedOrderAddressSet.xml")
     void orderAddressDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/order/orderAddressDataSet.xml");
+
         IOrderAddressDao orderAddressDao = context.getBean(IOrderAddressDao.class);
-        OrderAddress orderAddress = new OrderAddress();
+        OrderAddress orderAddress =
+                (OrderAddress) getEntity(orderAddressDao, "order_address", "street", SOME_STRING);
+
         orderAddress.setApartmentNumber(1);
         orderAddress.setBuilding(1);
         orderAddress.setFlor(1);
-        orderAddress.setStreet(SOME_STRING);
-        orderAddressDao.saveEntity(orderAddress);
-        List<OrderAddress> orderAddressList =
-                orderAddressDao.getEntityListBySQLQuery("select * from order_address a;");
-        Assertions.assertFalse(orderAddressList.isEmpty());
-        Assertions.assertEquals(SOME_STRING, orderAddressList.get(0).getStreet());
-
+        orderAddress.setStreet(SOME_STRING_UPDATED);
+        orderAddressDao.updateEntity(orderAddress);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderDetailSet.xml")
+    @ExpectedDataSet("/data/expected/update/order/updatedExpectedOrderDetailSet.xml")
     void orderDetailDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/order/orderDetailDataSet.xml");
+
         IOrderDetailDao orderDetailDao = context.getBean(IOrderDetailDao.class);
-        OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setFirstName(NAME);
-        orderDetailDao.saveEntity(orderDetail);
-        List<OrderDetail> orderDetailList =
-                orderDetailDao.getEntityListBySQLQuery("select * from order_detail o;");
-        Assertions.assertFalse(orderDetailList.isEmpty());
+        OrderDetail orderDetail =
+                (OrderDetail) getEntity(orderDetailDao, "order_detail", "firstName", NAME);
+
+        orderDetail.setFirstName(NAME_UPDATED);
+        orderDetailDao.updateEntity(orderDetail);
 
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderStatusSet.xml")
+    @ExpectedDataSet("/data/expected/update/order/updatedExpectedOrderStatusSet.xml")
     void orderStatusDaoBeanTest() {
-        IOrderStatusDao orderStatusDao = context.getBean(IOrderStatusDao.class);
-        OrderStatus status = new OrderStatus();
-        status.setName(OrderStatusEnum.NEW);
-        orderStatusDao.saveEntity(status);
-        List<OrderStatus> orderStatusList =
-                orderStatusDao.getEntityListBySQLQuery("select * from order_status o;");
-        Assertions.assertFalse(orderStatusList.isEmpty());
-        Assertions.assertEquals(OrderStatusEnum.NEW, orderStatusList.get(0).getName());
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/order/orderStatusDataSet.xml");
 
+        IOrderStatusDao orderStatusDao = context.getBean(IOrderStatusDao.class);
+        OrderStatus status =
+                (OrderStatus) getEntity(orderStatusDao, "order_status", "name", OrderStatusEnum.NEW.name());
+
+        status.setName(OrderStatusEnum.COMPLETE);
+        orderStatusDao.updateEntity(status);
     }
 
     //to do
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderItemSet.xml")
+    @ExpectedDataSet("/data/expected/update/order/updatedExpectedOrderItemSet.xml")
     void orderItemDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/order/orderItemDataSet.xml");
+
         IOrderItemDao orderDao = context.getBean(IOrderItemDao.class);
-        OrderItem orderItem = new OrderItem();
-        orderItem.setDateOfCreate(UPDATED_DATE_OF_CREATE);
-        orderDao.saveEntity(orderItem);
-        List<OrderItem> orderItemList = orderDao.getEntityListBySQLQuery("select * from order_item o;");
-        Assertions.assertFalse(orderItemList.isEmpty());
+        OrderItem orderItem =
+                (OrderItem) getEntity(orderDao, "order_item", "dateofcreate", DATE_OF_CREATE);
 
+        orderItem.setDateOfCreate(DATE_OF_CREATE_UPDATED);
+        orderDao.updateEntity(orderItem);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/order/createExpectedOrderHistorySet.xml")
+    @ExpectedDataSet("/data/expected/update/order/updatedExpectedOrderHistorySet.xml")
     void orderHistoryDaoBeanTest() {
-        IOrderHistoryDao orderHistoryDao = context.getBean(IOrderHistoryDao.class);
-        OrderHistory orderHistory = new OrderHistory();
-        orderHistory.setDateOfCreate(UPDATED_DATE_OF_CREATE);
-        orderHistoryDao.saveEntity(orderHistory);
-        List<OrderHistory> orderHistoryList =
-                orderHistoryDao.getEntityListBySQLQuery("select * from order_history o;");
-        Assertions.assertFalse(orderHistoryList.isEmpty());
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/order/orderHistoryDataSet.xml");
 
+        IOrderHistoryDao orderHistoryDao = context.getBean(IOrderHistoryDao.class);
+        OrderHistory orderHistory =
+                (OrderHistory) getEntity(orderHistoryDao, "order_history", "dateofcreate", DATE_OF_CREATE);
+
+        orderHistory.setDateOfCreate(DATE_OF_CREATE_UPDATED);
+        orderHistoryDao.updateEntity(orderHistory);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/business/createExpectedBusinessAddressSet.xml")
+    @ExpectedDataSet("/data/expected/update/business/updatedExpectedBusinessAddressSet.xml")
     void businessAddressDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/business/businessAddressDataSet.xml");
+
         IBusinessAddressDao businessAddressDao = context.getBean(IBusinessAddressDao.class);
-        BusinessAddress businessAddress = new BusinessAddress();
+        BusinessAddress businessAddress =
+                (BusinessAddress) getEntity(businessAddressDao, "business_address", "street", SOME_STRING);
+
         businessAddress.setApartmentNumber(1);
         businessAddress.setBuilding(1);
         businessAddress.setFlor(1);
-        businessAddress.setStreet(SOME_STRING);
-        businessAddressDao.saveEntity(businessAddress);
-        List<BusinessAddress> businessAddressList =
-                businessAddressDao.getEntityListBySQLQuery("select * from business_address b;");
-        Assertions.assertFalse(businessAddressList.isEmpty());
-
+        businessAddress.setStreet(SOME_STRING_UPDATED);
+        businessAddressDao.updateEntity(businessAddress);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/business/createExpectedShopSet.xml")
+    @ExpectedDataSet("/data/expected/update/business/updatedExpectedShopSet.xml")
     void shopDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/business/shopDataSet.xml");
+
         IShopDao shopDao = context.getBean(IShopDao.class);
-        Shop shop = new Shop();
+        Shop shop =
+                (Shop) getEntity(shopDao, "shop", "name", NAME);
 
-        shop.setName(NAME);
-        shopDao.saveEntity(shop);
-        List<Shop> shopList =
-                shopDao.getEntityListBySQLQuery("select * from shop s;");
-        Assertions.assertFalse(shopList.isEmpty());
-
+        shop.setName(NAME_UPDATED);
+        shopDao.updateEntity(shop);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/business/createExpectedStoreSet.xml")
+    @ExpectedDataSet("/data/expected/update/business/updatedExpectedStoreSet.xml")
     void storeDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/business/storeDataSet.xml");
+
         IStoreDao storeDao = context.getBean(IStoreDao.class);
-        Store store = new Store();
+        Store store =
+                (Store) getEntity(storeDao, "store", "name", NAME);
 
-        store.setName(NAME);
-        storeDao.saveEntity(store);
-        List<Store> shopList =
-                storeDao.getEntityListBySQLQuery("select * from store s;");
-        Assertions.assertFalse(shopList.isEmpty());
-
+        store.setName(NAME_UPDATED);
+        storeDao.updateEntity(store);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/post/createExpectedPostSet.xml")
+    @ExpectedDataSet("/data/expected/update/post/updatedExpectedPostSet.xml")
     void postDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/post/postDataSet.xml");
+
         IPostDao postDao = context.getBean(IPostDao.class);
-        Post post = new Post();
+        Post post =
+                (Post) getEntity(postDao, "post", "authorName", NAME);
 
-        post.setAuthorName(NAME);
-        post.setAuthorEmail(EMAIL);
-        postDao.saveEntity(post);
-        List<Post> postList =
-                postDao.getEntityListBySQLQuery("select * from post s;");
-        Assertions.assertFalse(postList.isEmpty());
-
+        post.setAuthorName(NAME_UPDATED);
+        post.setAuthorEmail(EMAIL_UPDATED);
+        postDao.updateEntity(post);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/rating/createExpectedRatingSet.xml")
+    @ExpectedDataSet("/data/expected/update/rating/updatedExpectedRatingSet.xml")
     void ratingDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/rating/ratingDataSet.xml");
+
         IRatingDao ratingDao = context.getBean(IRatingDao.class);
-        Rating rating = new Rating();
-        rating.setRatingEnum(RateEnum.FIVE);
-        ratingDao.saveEntity(rating);
-        List<Rating> ratingList =
-                ratingDao.getEntityListBySQLQuery("select * from rating r;");
-        Assertions.assertFalse(ratingList.isEmpty());
+        Rating rating =
+                (Rating) getEntity(ratingDao, "rating", "value", RateEnum.FIVE.getValue());
 
+        rating.setRatingEnum(RateEnum.ONE);
+        ratingDao.updateEntity(rating);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/liked/createExpectedLikedSet.xml")
+    @ExpectedDataSet("/data/expected/update/liked/updatedExpectedLikedSet.xml")
     void likedDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/liked/likedDataSet.xml");
+
         ILikedDao likedDao = context.getBean(ILikedDao.class);
-        Liked liked = new Liked();
-        liked.setDateOfCreate(UPDATED_DATE_OF_CREATE);
-        likedDao.saveEntity(liked);
-        List<Liked> ratingList =
-                likedDao.getEntityListBySQLQuery("select * from liked l;");
-        Assertions.assertFalse(ratingList.isEmpty());
+        Liked liked =
+                (Liked) getEntity(likedDao, "liked", "dateofcreate", DATE_OF_CREATE);
 
+        liked.setDateOfCreate(DATE_OF_CREATE_UPDATED);
+        likedDao.updateEntity(liked);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/review/createExpectedReviewSet.xml")
+    @ExpectedDataSet("/data/expected/update/review/updatedExpectedReviewSet.xml")
     void reviewDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/review/reviewDataSet.xml");
+
         IReviewDao reviewDao = context.getBean(IReviewDao.class);
-        Review review = new Review();
-        review.setDateOfCreate(UPDATED_DATE_OF_CREATE);
-        reviewDao.saveEntity(review);
-        List<Review> reviewList =
-                reviewDao.getEntityListBySQLQuery("select * from review r;");
-        Assertions.assertFalse(reviewList.isEmpty());
+        Review review =
+                (Review) getEntity(reviewDao, "review", "dateofcreate", DATE_OF_CREATE);
 
+        review.setDateOfCreate(DATE_OF_CREATE_UPDATED);
+        reviewDao.updateEntity(review);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/viewed/createExpectedViewedSet.xml")
+    @ExpectedDataSet("/data/expected/update/viewed/updatedExpectedViewedSet.xml")
     void viewedDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/viewed/viewedDataSet.xml");
+
         IViewedDao viewedDao = context.getBean(IViewedDao.class);
-        Viewed viewed = new Viewed();
-        viewed.setDateOfCreate(UPDATED_DATE_OF_CREATE);
-        viewedDao.saveEntity(viewed);
-        List<Viewed> viewedList =
-                viewedDao.getEntityListBySQLQuery("select * from viewed v;");
-        Assertions.assertFalse(viewedList.isEmpty());
+        Viewed viewed =
+                (Viewed) getEntity(viewedDao, "viewed", "dateofcreate", DATE_OF_CREATE);
 
+        viewed.setDateOfCreate(DATE_OF_CREATE_UPDATED);
+        viewedDao.updateEntity(viewed);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/bucket/createExpectedBucketSet.xml")
+    @ExpectedDataSet("/data/expected/update/bucket/updatedExpectedBucketSet.xml")
     void bucketDaoBeanTest() {
-        IBucketDao bucketDao = context.getBean(IBucketDao.class);
-        Bucket bucket = new Bucket();
-        bucket.setDateOfLastUpdate(UPDATED_DATE_OF_CREATE);
-        bucketDao.saveEntity(bucket);
-        List<Bucket> bucketList =
-                bucketDao.getEntityListBySQLQuery("select * from bucket b;");
-        Assertions.assertFalse(bucketList.isEmpty());
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/bucket/bucketDataSet.xml");
 
+        IBucketDao bucketDao = context.getBean(IBucketDao.class);
+        Bucket bucket =
+                (Bucket) getEntity(bucketDao, "bucket", "dateoflastupdate", DATE_OF_CREATE);
+
+        bucket.setDateOfLastUpdate(DATE_OF_CREATE_UPDATED);
+        bucketDao.updateEntity(bucket);
     }
 
     @Test
     @DataSet(cleanBefore = true, cleanAfter = true)
-    @ExpectedDataSet("/data/expected/create/option/createExpectedOptionGroupSet.xml")
+    @ExpectedDataSet("/data/expected/update/option/updatedExpectedOptionGroupSet.xml")
     void optionGroupDaoBeanTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT,
+                "/data/initclientdb/option/optionGroupDataSet.xml");
+
         IOptionGroupDao optionGroupDao = context.getBean(IOptionGroupDao.class);
-        OptionGroup optionGroup = new OptionGroup();
-        optionGroup.setOptionGroup(OptionGroupEnum.COLOR);
-        optionGroupDao.saveEntity(optionGroup);
-        List<OptionGroup> optionGroupList =
-                optionGroupDao.getEntityListBySQLQuery("select * from option_group o;");
-        Assertions.assertFalse(optionGroupList.isEmpty());
+        OptionGroup optionGroup =
+                (OptionGroup) getEntity(optionGroupDao, "option_group", "optionGroup", OptionGroupEnum.COLOR.name());
+
+        optionGroup.setOptionGroup(OptionGroupEnum.SIZE);
+        optionGroupDao.updateEntity(optionGroup);
     }
 
 //    @Test
 //    @DataSet(cleanBefore = true, cleanAfter = true)
-//    @ExpectedDataSet("/data/expected/create/option/createExpectedProductSet.xml")
+//    @ExpectedDataSet("/data/expected/update/option/updatedExpectedProductSet.xml")
 //    void optionDaoBeanTest() {
 //        IOptionDao optionDao = context.getBean(IOptionDao.class);
 //        Option option = new Option();

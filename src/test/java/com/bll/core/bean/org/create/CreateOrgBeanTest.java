@@ -21,6 +21,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
 import static com.bll.core.util.TestConstant.NAME;
+import static com.bll.core.util.TestUtil.getQuery;
 
 @ExtendWith({DBUnitExtension.class})
 public class CreateOrgBeanTest extends AbstractBeanTest {

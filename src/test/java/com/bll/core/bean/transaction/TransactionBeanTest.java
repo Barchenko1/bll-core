@@ -21,9 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
 import static com.bll.core.util.TestConstant.NAME;
@@ -39,7 +37,7 @@ public class TransactionBeanTest extends AbstractBeanTest {
     public static void getSessionFactory() {
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class);
         sessionFactory = context.getBean("tenantSessionFactory", SessionFactory.class);
-        transactionManager = context.getBean("transactionManager", ITransactionManager.class);
+        transactionManager = context.getBean("orgTransactionManager", ITransactionManager.class);
 
         dataSource = getOrgHikariDataSource();
         connectionHolder = dataSource::getConnection;

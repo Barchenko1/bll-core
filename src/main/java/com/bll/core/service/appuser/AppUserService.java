@@ -1,80 +1,69 @@
 package com.bll.core.service.appuser;
 
+import com.bll.core.util.IDtoEntityMapper;
 import com.core.im.tenant.constant.RoleEnum;
-import com.core.im.tenant.dto.request.OptionParams;
 import com.core.im.tenant.dto.request.RegistrationAppUserDto;
 import com.core.im.tenant.modal.user.AppUser;
 import com.core.im.tenant.modal.user.UserAddress;
 import com.core.im.tenant.modal.user.UserDetail;
+import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.transaction.ITransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class AppUserService {
+public class AppUserService implements IAppUserService {
 
-    private final ITransactionManager transactionManager;
+    private final ITransactionManager clientTransactionManager;
     private final IAppUserDao appUserDao;
     private final Map<String, UserRole> userRoleMap;
+    private final IDtoEntityMapper dtoEntityMapper;
 
     @Autowired
-    public AppUserService(ITransactionManager transactionManager, IAppUserDao appUserDao, Map<String, UserRole> userRoleMap) {
-        this.transactionManager = transactionManager;
+    public AppUserService(@Qualifier("clientTransactionManager")ITransactionManager clientTransactionManager,
+                          IAppUserDao appUserDao,
+                          Map<String, UserRole> userRoleMap,
+                          IDtoEntityMapper dtoEntityMapper) {
+        this.clientTransactionManager = clientTransactionManager;
         this.appUserDao = appUserDao;
         this.userRoleMap = userRoleMap;
+        this.dtoEntityMapper = dtoEntityMapper;
     }
 
+    @Override
     public void createNewUser(RegistrationAppUserDto registrationAppUserDto, RoleEnum roleEnum) {
         AppUser createNewUser = new AppUser();
-        createNewUser.setEmail(registrationAppUserDto.getEmail());
-        createNewUser.setPassword(registrationAppUserDto.getPassword());
+        dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, createNewUser);
         createNewUser.setRole(getUserRole(roleEnum));
 
-        OptionParams optionParams = registrationAppUserDto.getOptionParams();
-        String username = (String) optionParams.getOrDefault("username", null);
+        List<?> list = new ArrayList<>(){{
+            UserPayment userPayment = createNewUser.getUserPayment();
+            if (userPayment != null) {
+                add(userPayment);
+            }
+            UserAddress userAddress = createNewUser.getUserAddress();
+            if (userAddress != null) {
+                add(userAddress);
+            }
+            UserDetail userDetail = createNewUser.getUserDetail();
+            if (userDetail != null) {
+                add(userDetail);
+            }
+            add(createNewUser);
+        }};
 
-
-        UserAddress userAddress = getUserAddress(optionParams);
-        UserDetail userDetail = getUserDetail(optionParams);
-
-        List<?> list = Arrays.asList(createNewUser, userAddress, userDetail);
-        transactionManager.useTransaction(list);
-    }
-
-    private UserAddress getUserAddress(OptionParams optionParams) {
-        String street = (String) optionParams
-                .getOrDefault("street", null);
-
-        UserAddress userAddress = new UserAddress();
-        userAddress.setStreet(street);
-
-        return userAddress;
+        clientTransactionManager.useTransaction(list);
     }
 
     private UserRole getUserRole(RoleEnum roleEnum) {
         return userRoleMap.get(roleEnum.getValue());
-    }
-    
-    private UserDetail getUserDetail(OptionParams optionParams) {
-        String firstName = (String) optionParams
-                .getOrDefault("firstName", null);
-        String surName = (String) optionParams
-                .getOrDefault("surName", null);
-        String phone = (String) optionParams
-                .getOrDefault("phone", null);
-
-        UserDetail userDetail = new UserDetail();
-        userDetail.setFirstName(firstName);
-        userDetail.setSurName(surName);
-        userDetail.setPhone(phone);
-        
-        return userDetail;
     }
 
 }

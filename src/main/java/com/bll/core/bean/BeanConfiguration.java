@@ -101,8 +101,10 @@ import com.cos.core.dao.viewed.IViewedDao;
 import com.cos.core.transaction.BasicTransactionManager;
 import com.cos.core.transaction.ITransactionManager;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class BeanConfiguration {
@@ -124,11 +126,20 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public ITransactionManager transactionManager(SessionFactory tenantSessionFactory) {
-        ITransactionManager transactionManager = new BasicTransactionManager(
+    @Primary
+    @Qualifier("clientTransactionManager")
+    public ITransactionManager clientTransactionManager(SessionFactory sessionFactory) {
+        return new BasicTransactionManager(
+                sessionFactory
+        );
+    }
+
+    @Bean
+    @Qualifier("orgTransactionManager")
+    public ITransactionManager orgTransactionManager(SessionFactory tenantSessionFactory) {
+        return new BasicTransactionManager(
                 tenantSessionFactory
         );
-        return transactionManager;
     }
 
     //dto bean example

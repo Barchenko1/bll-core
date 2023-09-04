@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT;
         "com.bll.core.bean.tenant.create",
         "com.bll.core.bean.tenant.update",
         "com.bll.core.bean.tenant.delete",
+        "com.bll.core.service",
         "com.bll.core.bean.org.create",
         "com.bll.core.bean.transaction"})
 class JUnitTestSuite {

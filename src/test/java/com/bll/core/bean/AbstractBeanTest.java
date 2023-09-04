@@ -39,7 +39,7 @@ public abstract class AbstractBeanTest {
         dataSource.getConnection().close();
     }
 
-    protected static HikariDataSource getTenantHikariDataSource() {
+    public static HikariDataSource getTenantHikariDataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(POSTGRES_TENANT_DB_URL);
         dataSource.setUsername(POSTGRES_TENANT_USERNAME);
@@ -50,7 +50,7 @@ public abstract class AbstractBeanTest {
         return dataSource;
     }
 
-    protected static HikariDataSource getOrgHikariDataSource() {
+    public static HikariDataSource getOrgHikariDataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(POSTGRES_ORG_DB_URL);
         dataSource.setUsername(POSTGRES_ORG_USERNAME);

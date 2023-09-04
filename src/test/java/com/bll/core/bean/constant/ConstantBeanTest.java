@@ -3,7 +3,7 @@ package com.bll.core.bean.constant;
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
 import com.bll.core.bean.ConstantBeanConfiguration;
-import com.bll.core.util.TestUtil;
+import com.bll.core.mapper.TestUtil;
 import com.core.im.tenant.constant.OptionGroupEnum;
 import com.core.im.tenant.constant.OrderStatusEnum;
 import com.core.im.tenant.constant.ProductStatusEnum;

@@ -2,7 +2,7 @@ package com.bll.core.bean.tenant.delete;
 
 import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
-import com.bll.core.util.TestUtil;
+import com.bll.core.mapper.TestUtil;
 import com.core.im.tenant.constant.BrandEnum;
 import com.core.im.tenant.constant.CategoryEnum;
 import com.core.im.tenant.constant.OptionGroupEnum;
@@ -73,15 +73,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static com.bll.core.util.TestConstant.CART_NUMBER;
-import static com.bll.core.util.TestConstant.CART_NUMBER_UPDATED;
-import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
-import static com.bll.core.util.TestConstant.DATE_OF_CREATE_UPDATED;
-import static com.bll.core.util.TestConstant.EMAIL_UPDATED;
-import static com.bll.core.util.TestConstant.NAME;
-import static com.bll.core.util.TestConstant.NAME_UPDATED;
-import static com.bll.core.util.TestConstant.PASSWORD_UPDATED;
-import static com.bll.core.util.TestConstant.SOME_STRING;
+import static com.bll.core.mapper.TestConstant.CART_NUMBER;
+import static com.bll.core.mapper.TestConstant.DATE_OF_CREATE;
+import static com.bll.core.mapper.TestConstant.NAME;
+import static com.bll.core.mapper.TestConstant.SOME_STRING;
 
 @ExtendWith(DBUnitExtension.class)
 public class DeleteTenantBeanTest extends AbstractBeanTest {

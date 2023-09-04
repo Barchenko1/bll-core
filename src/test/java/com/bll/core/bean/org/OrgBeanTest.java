@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
-import static com.bll.core.util.TestConstant.NAME;
-import static com.bll.core.util.TestUtil.getQuery;
+import static com.bll.core.mapper.TestConstant.DATE_OF_CREATE;
+import static com.bll.core.mapper.TestConstant.NAME;
+import static com.bll.core.mapper.TestUtil.getQuery;
 
 @ExtendWith({DBUnitExtension.class})
 public class OrgBeanTest extends AbstractBeanTest {

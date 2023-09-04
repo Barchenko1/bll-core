@@ -4,31 +4,22 @@ import com.bll.core.bean.AbstractBeanTest;
 import com.bll.core.bean.BeanConfiguration;
 import com.bll.core.bean.ConstantBeanConfiguration;
 import com.bll.core.bean.ServiceBeanConfiguration;
-import com.bll.core.service.appuser.AppUserService;
 import com.bll.core.service.appuser.IAppUserService;
-import com.bll.core.util.TestUtil;
+import com.bll.core.mapper.TestUtil;
 import com.core.im.tenant.constant.RoleEnum;
-import com.core.im.tenant.dto.request.RegistrationAppUserDto;
-import com.core.im.tenant.modal.user.AppUser;
+import com.core.im.tenant.dto.request.post.RegistrationAppUserDto;
 import com.core.im.tenant.modal.user.UserDetail;
 import com.github.database.rider.core.api.connection.ConnectionHolder;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
-import org.dbunit.database.DatabaseDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-import java.util.Arrays;
-
-import static com.bll.core.bean.AbstractBeanTest.getOrgHikariDataSource;
-import static com.bll.core.bean.AbstractBeanTest.getTenantHikariDataSource;
+import static com.bll.core.mapper.TestConstant.SOME_STRING;
 
 @ExtendWith(DBUnitExtension.class)
 public class ServiceBeanTest extends AbstractBeanTest {
@@ -37,13 +28,12 @@ public class ServiceBeanTest extends AbstractBeanTest {
     private static ConnectionHolder connectionHolder;
 
     @BeforeAll
-    public static void getSessionFactory() throws SQLException {
-
-        context = new AnnotationConfigApplicationContext(BeanConfiguration.class, ServiceBeanConfiguration.class, ConstantBeanConfiguration.class);
-        Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println);
+    public static void getSessionFactory() {
         dataSource = getTenantHikariDataSource();
         connectionHolder = dataSource::getConnection;
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initUserRoleDataSet.xml");
 
+        context = new AnnotationConfigApplicationContext(BeanConfiguration.class, ServiceBeanConfiguration.class, ConstantBeanConfiguration.class);
         appUserService = context.getBean("appUserService", IAppUserService.class);
     }
 
@@ -53,7 +43,7 @@ public class ServiceBeanTest extends AbstractBeanTest {
     }
 
     @Test
-    @DataSet(cleanBefore = true, cleanAfter = true)
+    @DataSet(cleanAfter = true)
     void appUserServiceTest() {
         RegistrationAppUserDto registrationAppUserDto = new RegistrationAppUserDto();
         registrationAppUserDto.setEmail("test@mail.com");
@@ -63,6 +53,9 @@ public class ServiceBeanTest extends AbstractBeanTest {
         userDetail.setPhone("050-5005");
 
         registrationAppUserDto.setUserDetail(userDetail);
+
+        registrationAppUserDto.setStreet(SOME_STRING);
+        registrationAppUserDto.setApartmentNumber(111);
         appUserService.createNewUser(registrationAppUserDto, RoleEnum.ROLE_USER);
     }
 }

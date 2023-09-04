@@ -1,4 +1,4 @@
-package com.bll.core.util;
+package com.bll.core.mapper;
 
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -10,7 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import javax.sql.DataSource;
 import java.sql.Connection;
 
-import static com.bll.core.util.QueryPattern.SELECT_ALL;
+import static com.bll.core.mapper.QueryPattern.SELECT_ALL;
 
 public final class TestUtil {
 

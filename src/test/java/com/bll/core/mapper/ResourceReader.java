@@ -1,4 +1,4 @@
-package com.bll.core.util;
+package com.bll.core.mapper;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;

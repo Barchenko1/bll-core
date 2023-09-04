@@ -41,7 +41,6 @@ import com.cos.core.dao.business.IBusinessAddressDao;
 import com.cos.core.dao.business.IShopDao;
 import com.cos.core.dao.business.IStoreDao;
 import com.cos.core.dao.liked.ILikedDao;
-import com.cos.core.dao.option.IOptionDao;
 import com.cos.core.dao.option.IOptionGroupDao;
 import com.cos.core.dao.order.IOrderAddressDao;
 import com.cos.core.dao.order.IOrderDetailDao;
@@ -77,12 +76,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.util.Arrays;
 import java.util.List;
 
-import static com.bll.core.util.TestConstant.CART_NUMBER;
-import static com.bll.core.util.TestConstant.DATE_OF_CREATE;
-import static com.bll.core.util.TestConstant.EMAIL;
-import static com.bll.core.util.TestConstant.NAME;
-import static com.bll.core.util.TestConstant.PASSWORD;
-import static com.bll.core.util.TestConstant.SOME_STRING;
+import static com.bll.core.mapper.TestConstant.CART_NUMBER;
+import static com.bll.core.mapper.TestConstant.DATE_OF_CREATE;
+import static com.bll.core.mapper.TestConstant.EMAIL;
+import static com.bll.core.mapper.TestConstant.NAME;
+import static com.bll.core.mapper.TestConstant.PASSWORD;
+import static com.bll.core.mapper.TestConstant.SOME_STRING;
 
 @ExtendWith(DBUnitExtension.class)
 public class CreateTenantBeanTest extends AbstractBeanTest {

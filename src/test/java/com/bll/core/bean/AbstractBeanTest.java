@@ -1,19 +1,15 @@
 package com.bll.core.bean;
 
-import com.bll.core.util.TestUtil;
-import com.core.im.org.modal.Organization;
+import com.bll.core.mapper.TestUtil;
 import com.cos.core.dao.IEntityDao;
 import com.zaxxer.hikari.HikariDataSource;
-import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.sql.DataSource;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import static com.bll.core.constant.Constant.POSTGRES_DRIVER;
@@ -23,8 +19,7 @@ import static com.bll.core.constant.Constant.POSTGRES_ORG_USERNAME;
 import static com.bll.core.constant.Constant.POSTGRES_TENANT_DB_URL;
 import static com.bll.core.constant.Constant.POSTGRES_TENANT_PASSWORD;
 import static com.bll.core.constant.Constant.POSTGRES_TENANT_USERNAME;
-import static com.bll.core.util.QueryPattern.SELECT_ALL;
-import static com.bll.core.util.QueryPattern.SELECT_BY_PARAM;
+import static com.bll.core.mapper.QueryPattern.SELECT_BY_PARAM;
 
 public abstract class AbstractBeanTest {
 

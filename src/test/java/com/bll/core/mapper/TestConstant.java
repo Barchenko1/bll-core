@@ -1,4 +1,4 @@
-package com.bll.core.util;
+package com.bll.core.mapper;
 
 public interface TestConstant {
 

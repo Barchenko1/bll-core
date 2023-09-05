@@ -130,9 +130,32 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${failsafe.plugin.version}</version>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.2</version> <!-- Use the latest version -->
+                <executions>
+                    <execution>
+                        <id>copy-json-resources</id>
+                        <phase>generate-resources</phase> <!-- You can choose an appropriate phase -->
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.core.im</groupId>
+                                    <artifactId>integration-modal</artifactId>
+                                    <version>1.0-SNAPSHOT</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.basedir}/src/main/resources/bind</outputDirectory>
+                                    <includes>**/*.json</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+
 
         </plugins>
         <resources>

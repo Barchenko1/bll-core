@@ -1,6 +1,8 @@
 package com.bll.core.bean;
 
 import com.bll.core.mapper.DtoEntityMapper;
+import com.bll.core.mapper.IJsonDtoBindMapper;
+import com.bll.core.mapper.JsonDtoBindMapper;
 import com.bll.core.service.appuser.AppUserService;
 import com.bll.core.service.appuser.IAppUserService;
 import com.bll.core.service.product.IProductService;
@@ -19,8 +21,13 @@ import java.util.Map;
 public class ServiceBeanConfiguration {
 
     @Bean
-    public IDtoEntityMapper dtoEntityMapper() {
-        return new DtoEntityMapper();
+    public IJsonDtoBindMapper appUserDtoBindMapper() {
+        return new JsonDtoBindMapper("bind/appUserDtoBind.json");
+    }
+
+    @Bean
+    public IDtoEntityMapper dtoEntityMapper(IJsonDtoBindMapper appUserDtoBindMapper) {
+        return new DtoEntityMapper(appUserDtoBindMapper);
     }
 
     @Bean

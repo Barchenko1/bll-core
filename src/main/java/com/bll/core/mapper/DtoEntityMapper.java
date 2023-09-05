@@ -5,14 +5,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 public class DtoEntityMapper implements IDtoEntityMapper {
 
-    private final IJsonDtoBindMapper jsonDtoBindMapper = new JsonDtoBindMapper("appUserDtoBind.json");
+    private final IJsonDtoBindMapper jsonDtoBindMapper;
+
+    public DtoEntityMapper(IJsonDtoBindMapper jsonDtoBindMapper) {
+        this.jsonDtoBindMapper = jsonDtoBindMapper;
+    }
 
     @Override
     public <E, R> void mapDtoToEntity(E dtoObject, R entityObject) {
@@ -20,46 +21,50 @@ public class DtoEntityMapper implements IDtoEntityMapper {
         Field[] classFields = entityObject.getClass().getDeclaredFields();
 
         for (Field classField: classFields) {
-            Map<Field, Object> tempFildValueMap = new HashMap<>();
+            Map<Field, Object> tempFieldValueMap = new HashMap<>();
             for (Field dtoField: dtoFields) {
                 if (dtoField.getName().equals(classField.getName())
                         && dtoField.getType() == classField.getType()) {
                     mapDtoToObject(dtoObject, entityObject, dtoField);
                 }
-                if (!typeSet().contains(classField.getType().getName())) {
-                    Object object = getInnerObject(classField);
-                    Field[] innerObjectFieldArray = object.getClass().getDeclaredFields();
-                    Optional<Field> innerObjectFieldOpt = findMatchingDtoField(innerObjectFieldArray, dtoField);
-                    innerObjectFieldOpt.ifPresent(innerObjectField -> {
-                        mapDtoToObject(dtoObject, object, dtoField);
-                        try {
-                            tempFildValueMap.put(dtoField, dtoField.get(dtoObject));
-                        } catch (IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+                if (isClassBind(classField, dtoField)) {
+                    mapFieldValue(dtoObject, classField, dtoField, tempFieldValueMap);
                 }
             }
-            if (!tempFildValueMap.isEmpty()) {
-                Object object = getInnerObject(classField);
-                tempFildValueMap.forEach((key, value) -> {
-                    setField(object, key, value);
-                });
-                setField(entityObject, classField, object);
+            if (!tempFieldValueMap.isEmpty()) {
+                fillInnerClassFields(entityObject, classField, tempFieldValueMap);
             }
 
         }
     }
 
-    private Optional<Field> findMatchingDtoField(Field[] dtoFields, Field classField) {
-        return Arrays.stream(dtoFields)
-                .filter(dtoField -> dtoField.getName().equals(classField.getName())
-                        && dtoField.getType() == classField.getType())
-                .findFirst();
+    private <E> void mapFieldValue(E dtoObject, Field classField, Field dtoField, Map<Field, Object> tempFildValueMap) {
+        String classFieldName = getBindFieldName(dtoField);
+        Object object = getInnerObject(classField);
+        Field[] innerObjectFieldArray = object.getClass().getDeclaredFields();
+        Arrays.stream(innerObjectFieldArray)
+                .filter(field -> field.getName().equals(classFieldName))
+                .findFirst()
+                .ifPresent(field -> {
+                    dtoField.setAccessible(true);
+                    try {
+                        tempFildValueMap.put(dtoField, dtoField.get(dtoObject));
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }
+
+    private <R> void fillInnerClassFields(R entityObject, Field classField, Map<Field, Object> tempFildValueMap) {
+        Object object = getInnerObject(classField);
+        tempFildValueMap.forEach((key, value) -> {
+            setField(object, key, value);
+        });
+        setObject(entityObject, classField, object);
     }
 
     private <E, R> void mapDtoToObject(E dtoObject, R entityObject, Field dtoField) {
-        String setterMethodName = getSetMethodName(dtoField.getName());
+        String setterMethodName = getBindSetterName(dtoField);
         try {
             Method setterMethod = entityObject.getClass().getMethod(setterMethodName, dtoField.getType());
             dtoField.setAccessible(true);
@@ -68,6 +73,26 @@ public class DtoEntityMapper implements IDtoEntityMapper {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getBindSetterName(Field dtoField) {
+        return jsonDtoBindMapper.get(dtoField.getName())
+                .map(name -> getSetMethodName(name.substring(name.lastIndexOf(".") + 1)))
+                .orElseThrow(() -> new RuntimeException("wrong json bind mapping"));
+    }
+
+    private boolean isClassBind(Field classField, Field dtoField) {
+        return jsonDtoBindMapper.get(dtoField.getName())
+                .filter(name -> name.contains("."))
+                .map(name -> name.substring(0, name.lastIndexOf(".")))
+                .filter(name-> name.equalsIgnoreCase(classField.getName()))
+                .isPresent();
+    }
+
+    private String getBindFieldName(Field dtoField) {
+        return jsonDtoBindMapper.get(dtoField.getName())
+                .map(name -> name.substring(name.lastIndexOf(".") + 1))
+                .orElseThrow(() -> new RuntimeException("wrong json bind mapping"));
     }
 
     private String getSetMethodName(String input) {
@@ -85,7 +110,7 @@ public class DtoEntityMapper implements IDtoEntityMapper {
     }
 
     private void setField(Object entityObject, Field field, Object value) {
-        String setterMethodName = getSetMethodName(field.getName());
+        String setterMethodName = getBindSetterName(field);
         try {
             Method setterMethod = entityObject.getClass().getMethod(setterMethodName, field.getType());
             field.setAccessible(true);
@@ -95,26 +120,15 @@ public class DtoEntityMapper implements IDtoEntityMapper {
         }
     }
 
-    private Set<String> typeSet() {
-        return new HashSet<>() {{
-            add("java.lang.String");
-            add("java.lang.Enum");
-            add("char");
-            add("java.lang.Char");
-            add("byte");
-            add("java.lang.Byte");
-            add("short");
-            add("java.lang.Short");
-            add("int");
-            add("java.lang.Integer");
-            add("long");
-            add("java.lang.Long");
-            add("float");
-            add("java.lang.Float");
-            add("double");
-            add("java.lang.Double");
-            add("java.lang.Boolean");
-            add("boolean");
-        }};
+    private <R> void setObject(R entityObject, Field classField, Object object) {
+        String setterMethodName = getSetMethodName(classField.getName());
+        try {
+            Method setterMethod = entityObject.getClass().getMethod(setterMethodName, classField.getType());
+            classField.setAccessible(true);
+            setterMethod.invoke(entityObject, object);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

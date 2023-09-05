@@ -4,28 +4,32 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Optional;
 
 public class JsonDtoBindMapper implements IJsonDtoBindMapper {
 
     private final Gson gson = new Gson();
-
-    private final String jsonName;
+    private final JsonObject jsonObject;
 
     public JsonDtoBindMapper(String jsonName) {
-        this.jsonName = jsonName;
+        this.jsonObject = bindObject(jsonName);
     }
 
-    public JsonObject bindObject(String jsonName) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(jsonName));
-        } catch (FileNotFoundException e) {
+    private JsonObject bindObject(String jsonName) {
+        BufferedReader reader;
+        try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(jsonName)){
+            reader = new BufferedReader(new InputStreamReader(in));
+            return gson.fromJson(reader, JsonObject.class);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return gson.fromJson(reader, JsonObject.class);
     }
 
+    @Override
+    public Optional<String> get(String field) {
+        return jsonObject.has(field) ? Optional.of(jsonObject.get(field).getAsString()) : Optional.empty();
+    }
 }

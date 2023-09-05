@@ -54,8 +54,8 @@ public class ServiceBeanTest extends AbstractBeanTest {
 
         registrationAppUserDto.setUserDetail(userDetail);
 
-        registrationAppUserDto.setStreet(SOME_STRING);
-        registrationAppUserDto.setApartmentNumber(111);
+        registrationAppUserDto.setUserStreet(SOME_STRING);
+        registrationAppUserDto.setUserApartment(111);
         appUserService.createNewUser(registrationAppUserDto, RoleEnum.ROLE_USER);
     }
 }

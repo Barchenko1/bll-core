@@ -49,21 +49,7 @@ public class AppUserService implements IAppUserService {
         dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, createNewUser);
         createNewUser.setRole(getUserRole(roleEnum));
 
-        List<?> list = new ArrayList<>(){{
-            UserPayment userPayment = createNewUser.getUserPayment();
-            if (userPayment != null) {
-                add(userPayment);
-            }
-            UserAddress userAddress = createNewUser.getUserAddress();
-            if (userAddress != null) {
-                add(userAddress);
-            }
-            UserDetail userDetail = createNewUser.getUserDetail();
-            if (userDetail != null) {
-                add(userDetail);
-            }
-            add(createNewUser);
-        }};
+        List<?> list = getTransactionObjectList(createNewUser);
 
         clientTransactionManager.useTransaction(list);
     }
@@ -89,6 +75,24 @@ public class AppUserService implements IAppUserService {
         dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, userAddress);
         System.out.println(userAddress);
 
+    }
+
+    private List<?> getTransactionObjectList(AppUser appUser) {
+        return new ArrayList<>(){{
+            UserPayment userPayment = appUser.getUserPayment();
+            if (userPayment != null) {
+                add(userPayment);
+            }
+            UserAddress userAddress = appUser.getUserAddress();
+            if (userAddress != null) {
+                add(userAddress);
+            }
+            UserDetail userDetail = appUser.getUserDetail();
+            if (userDetail != null) {
+                add(userDetail);
+            }
+            add(appUser);
+        }};
     }
 
 }

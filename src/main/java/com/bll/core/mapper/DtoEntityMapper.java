@@ -5,8 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Optional;
+import java.util.Set;
 
 public class DtoEntityMapper implements IDtoEntityMapper {
 
@@ -16,48 +18,44 @@ public class DtoEntityMapper implements IDtoEntityMapper {
     public <E, R> void mapDtoToEntity(E dtoObject, R entityObject) {
         Field[] dtoFields = dtoObject.getClass().getDeclaredFields();
         Field[] classFields = entityObject.getClass().getDeclaredFields();
-        Arrays.stream(classFields).forEach(classField -> {
-            AtomicReference<Object> innerObject = new AtomicReference<>(null);
-            Arrays.stream(dtoFields).forEach(dtoField -> {
+
+        for (Field classField: classFields) {
+            Map<Field, Object> tempFildValueMap = new HashMap<>();
+            for (Field dtoField: dtoFields) {
                 if (dtoField.getName().equals(classField.getName())
                         && dtoField.getType() == classField.getType()) {
                     mapDtoToObject(dtoObject, entityObject, dtoField);
                 }
-                if (!typeMap().containsKey(classField.getType().getName())
-                        && !classField.getType().isEnum()) {
-                    classField.setAccessible(true);
-                    Class<?> objectType = classField.getType();
-                    Object object;
-                    try {
-                        object = objectType.getDeclaredConstructor().newInstance();
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                             NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    }
+                if (!typeSet().contains(classField.getType().getName())) {
+                    Object object = getInnerObject(classField);
                     Field[] innerObjectFieldArray = object.getClass().getDeclaredFields();
-                    Arrays.stream(innerObjectFieldArray).forEach(innerObjectField -> {
-                        if (dtoField.getName().equals(innerObjectField.getName())
-                                && dtoField.getType() == innerObjectField.getType()) {
-                            mapDtoToObject(dtoObject, object, dtoField);
-                            innerObject.set(object);
+                    Optional<Field> innerObjectFieldOpt = findMatchingDtoField(innerObjectFieldArray, dtoField);
+                    innerObjectFieldOpt.ifPresent(innerObjectField -> {
+                        mapDtoToObject(dtoObject, object, dtoField);
+                        try {
+                            tempFildValueMap.put(dtoField, dtoField.get(dtoObject));
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
                         }
                     });
-
-                }
-
-            });
-            if (innerObject.get() != null && classField.getType().getName().equals(innerObject.get().getClass().getName())
-                    && classField.getType() == innerObject.get().getClass()) {
-                String setterMethodName = getSetMethodName(classField.getName());
-                try {
-                    Method setterMethod = entityObject.getClass().getMethod(setterMethodName, classField.getType());
-                    classField.setAccessible(true);
-                    setterMethod.invoke(entityObject, innerObject.get());
-                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
                 }
             }
-        });
+            if (!tempFildValueMap.isEmpty()) {
+                Object object = getInnerObject(classField);
+                tempFildValueMap.forEach((key, value) -> {
+                    setField(object, key, value);
+                });
+                setField(entityObject, classField, object);
+            }
+
+        }
+    }
+
+    private Optional<Field> findMatchingDtoField(Field[] dtoFields, Field classField) {
+        return Arrays.stream(dtoFields)
+                .filter(dtoField -> dtoField.getName().equals(classField.getName())
+                        && dtoField.getType() == classField.getType())
+                .findFirst();
     }
 
     private <E, R> void mapDtoToObject(E dtoObject, R entityObject, Field dtoField) {
@@ -76,16 +74,47 @@ public class DtoEntityMapper implements IDtoEntityMapper {
         return "set" + input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
-    private Map<String, String> typeMap() {
-        return new HashMap<>() {{
-            put("java.lang.String", "");
-            put("java.lang.Enum", "");
-            put("int", "");
-            put("java.lang.Integer", "");
-            put("long", "");
-            put("java.lang.Long", "");
-            put("double", "");
-            put("java.lang.Double", "");
+    private Object getInnerObject(Field field) {
+        try {
+            field.setAccessible(true);
+            return field.getType().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setField(Object entityObject, Field field, Object value) {
+        String setterMethodName = getSetMethodName(field.getName());
+        try {
+            Method setterMethod = entityObject.getClass().getMethod(setterMethodName, field.getType());
+            field.setAccessible(true);
+            setterMethod.invoke(entityObject, value);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Set<String> typeSet() {
+        return new HashSet<>() {{
+            add("java.lang.String");
+            add("java.lang.Enum");
+            add("char");
+            add("java.lang.Char");
+            add("byte");
+            add("java.lang.Byte");
+            add("short");
+            add("java.lang.Short");
+            add("int");
+            add("java.lang.Integer");
+            add("long");
+            add("java.lang.Long");
+            add("float");
+            add("java.lang.Float");
+            add("double");
+            add("java.lang.Double");
+            add("java.lang.Boolean");
+            add("boolean");
         }};
     }
 }

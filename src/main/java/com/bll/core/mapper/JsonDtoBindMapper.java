@@ -15,10 +15,10 @@ public class JsonDtoBindMapper implements IJsonDtoBindMapper {
     private final JsonObject jsonObject;
 
     public JsonDtoBindMapper(String jsonName) {
-        this.jsonObject = bindObject(jsonName);
+        this.jsonObject = getJsonObject(jsonName);
     }
 
-    private JsonObject bindObject(String jsonName) {
+    private JsonObject getJsonObject(String jsonName) {
         BufferedReader reader;
         try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(jsonName)){
             reader = new BufferedReader(new InputStreamReader(in));

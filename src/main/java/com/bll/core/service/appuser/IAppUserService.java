@@ -7,4 +7,5 @@ import com.core.im.tenant.dto.request.put.UpdateUserDetailDto;
 public interface IAppUserService {
     void createNewUser(RegistrationAppUserDto registrationAppUserDto, RoleEnum roleEnum);
     void updateUserDetails(UpdateUserDetailDto userDetailDto);
+
 }

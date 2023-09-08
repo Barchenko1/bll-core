@@ -46,7 +46,7 @@ public class AppUserService implements IAppUserService {
     @Override
     public void createNewUser(RegistrationAppUserDto registrationAppUserDto, RoleEnum roleEnum) {
         AppUser createNewUser = new AppUser();
-        dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, createNewUser);
+        dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, createNewUser, "appUserDtoBind");
         createNewUser.setRole(getUserRole(roleEnum));
 
         List<?> list = getTransactionObjectList(createNewUser);
@@ -61,7 +61,7 @@ public class AppUserService implements IAppUserService {
             throw new RuntimeException();
         }
         UserDetail userDetail = userDetailOpt.get();
-        dtoEntityMapper.mapDtoToEntity(userDetailDto, userDetail);
+        dtoEntityMapper.mapDtoToEntity(userDetailDto, userDetail, "");
         userDetail.setFirstName("Man");
         userDetailDao.updateEntity(userDetail);
     }
@@ -72,7 +72,7 @@ public class AppUserService implements IAppUserService {
 
     private void getType(RegistrationAppUserDto registrationAppUserDto, AppUser appUser) {
         UserAddress userAddress = new UserAddress();
-        dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, userAddress);
+        dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, userAddress, "");
         System.out.println(userAddress);
 
     }

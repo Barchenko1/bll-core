@@ -48,11 +48,7 @@ public class PostService implements IPostService {
 
     @Override
     public void deletePost(PostDto postDto) {
-        List<Post> post = dtoEntityDao.getDtoList("SELECT \t\tp.id as id ,\n" +
-                "\t\tp.authoremail as authoremail ,\n" +
-                "\t\tp.authorname as authorname ,\n" +
-                "\t\tp.dateofcreate as dateofcreate ,\n" +
-                "\t\tp.message as message FROM post p where p.id='" + postDto.getPostId() +"'", Post.class);
+        Post post = dtoEntityDao.getDto("SELECT * FROM POST p where p.id='" + postDto.getPostId() +"'", Post.class);
         postDao.deleteEntity(post);
     }
 

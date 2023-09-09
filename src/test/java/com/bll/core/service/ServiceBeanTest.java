@@ -22,9 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static com.bll.core.mapper.TestConstant.SOME_STRING;
 
 @ExtendWith(DBUnitExtension.class)
@@ -38,7 +35,6 @@ public class ServiceBeanTest extends AbstractBeanTest {
     public static void getSessionFactory() {
         dataSource = getTenantHikariDataSource();
         connectionHolder = dataSource::getConnection;
-        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initUserRoleDataSet.xml");
 
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class, ServiceBeanConfiguration.class, ConstantBeanConfiguration.class);
         appUserService = context.getBean("appUserService", IAppUserService.class);
@@ -53,6 +49,8 @@ public class ServiceBeanTest extends AbstractBeanTest {
     @Test
     @DataSet(cleanAfter = true)
     void appUserServiceTest() {
+        TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initUserRoleDataSet.xml");
+
         RegistrationAppUserDto registrationAppUserDto = new RegistrationAppUserDto();
         registrationAppUserDto.setEmail("test@mail.com");
         registrationAppUserDto.setPassword("password");

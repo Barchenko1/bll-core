@@ -21,7 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.bll.core.mapper.TestConstant.DATE_OF_CREATE;
 import static com.bll.core.mapper.TestConstant.NAME;

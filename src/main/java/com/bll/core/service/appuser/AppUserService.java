@@ -49,9 +49,7 @@ public class AppUserService implements IAppUserService {
         dtoEntityMapper.mapDtoToEntity(registrationAppUserDto, createNewUser, "appUserDtoBind");
         createNewUser.setRole(getUserRole(roleEnum));
 
-        List<?> list = getTransactionObjectList(createNewUser);
-
-        clientTransactionManager.useTransaction(list);
+        clientTransactionManager.useTransaction(createNewUser);
     }
 
     @Override

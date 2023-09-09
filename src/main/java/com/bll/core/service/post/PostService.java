@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,17 +33,7 @@ public class PostService implements IPostService {
     public void createNewPost(PostDto postDto) {
         Post newPost = new Post();
         dtoEntityMapper.mapDtoToEntity(postDto, newPost, "postDtoBind");
-
-        List<?> list = getTransactionObjectList(newPost);
-
-        clientTransactionManager.useTransaction(list);
-    }
-
-    private List<?> getTransactionObjectList(Post post) {
-        return new ArrayList<>(){{
-
-            add(post);
-        }};
+        clientTransactionManager.useTransaction(newPost);
     }
 
 }

@@ -21,18 +21,7 @@ public class DtoEntityMapper implements IDtoEntityMapper {
         Field[] dtoFields = dtoObject.getClass().getDeclaredFields();
         Field[] classFields = entityObject.getClass().getDeclaredFields();
         jsonDtoBindMapper.setKey(bindKey);
-        List<FieldPayload> fieldPayloadList = Arrays.stream(dtoFields).map(dtoField -> {
-            String name = jsonDtoBindMapper.get(dtoField.getName())
-                    .orElseThrow(() -> new RuntimeException("not found map name"));
-            dtoField.setAccessible(true);
-            Object value;
-            try {
-                value = dtoField.get(dtoObject);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-            return new FieldPayload(name, dtoField.getType(), value);
-        }).toList();
+        List<FieldPayload> fieldPayloadList = getFieldPayloadList(dtoObject, dtoFields);
 
         for (Field classField: classFields) {
             if ("id".equals(classField.getName())) {
@@ -52,6 +41,21 @@ public class DtoEntityMapper implements IDtoEntityMapper {
                 fillInnerClassFields(entityObject, classField, innerFieldPayloadList);
             }
         }
+    }
+
+    private <E> List<FieldPayload> getFieldPayloadList(E dtoObject, Field[] dtoFields) {
+        return Arrays.stream(dtoFields).map(dtoField -> {
+            String name = jsonDtoBindMapper.get(dtoField.getName())
+                    .orElseThrow(() -> new RuntimeException("not found map name"));
+            dtoField.setAccessible(true);
+            Object value;
+            try {
+                value = dtoField.get(dtoObject);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            return new FieldPayload(name, dtoField.getType(), value);
+        }).toList();
     }
 
     private void mapFieldValue(Field classField, FieldPayload fieldPayload, List<FieldPayload> tempFildValueMap) {

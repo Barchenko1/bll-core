@@ -10,17 +10,17 @@ import java.util.Optional;
 
 public class DtoEntityMapper implements IDtoEntityMapper {
 
-    private final IJsonDtoBindMapper jsonDtoBindMapper;
+    private final IDtoEntityBind iDtoEntityBind;
 
-    public DtoEntityMapper(IJsonDtoBindMapper jsonDtoBindMapper) {
-        this.jsonDtoBindMapper = jsonDtoBindMapper;
+    public DtoEntityMapper(IDtoEntityBind jsonDtoBindMapper) {
+        this.iDtoEntityBind = jsonDtoBindMapper;
     }
 
     @Override
     public <E, R> void mapDtoToEntity(E dtoObject, R entityObject, String bindKey) {
         Field[] dtoFields = dtoObject.getClass().getDeclaredFields();
         Field[] classFields = entityObject.getClass().getDeclaredFields();
-        jsonDtoBindMapper.setKey(bindKey);
+        iDtoEntityBind.setKey(bindKey);
         List<FieldPayload> fieldPayloadList = getFieldPayloadList(dtoObject, dtoFields);
 
         for (Field classField: classFields) {
@@ -45,7 +45,7 @@ public class DtoEntityMapper implements IDtoEntityMapper {
 
     private <E> List<FieldPayload> getFieldPayloadList(E dtoObject, Field[] dtoFields) {
         return Arrays.stream(dtoFields).map(dtoField -> {
-            String name = jsonDtoBindMapper.get(dtoField.getName())
+            String name = iDtoEntityBind.get(dtoField.getName())
                     .orElseThrow(() -> new RuntimeException("not found map name"));
             dtoField.setAccessible(true);
             Object value;

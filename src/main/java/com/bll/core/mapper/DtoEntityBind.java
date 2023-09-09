@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class JsonDtoBindMapper implements IJsonDtoBindMapper {
+public class DtoEntityBind implements IDtoEntityBind {
 
     private static final String folderPath = "bind";
     private final Gson gson = new Gson();
     private final Map<String, JsonObject> jsonObjectMap;
     private String key;
 
-    public JsonDtoBindMapper() {
+    public DtoEntityBind() {
         this.jsonObjectMap = initJsonMap();
     }
 

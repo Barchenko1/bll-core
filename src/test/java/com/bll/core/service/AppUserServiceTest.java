@@ -25,10 +25,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import static com.bll.core.mapper.TestConstant.SOME_STRING;
 
 @ExtendWith(DBUnitExtension.class)
-public class ServiceBeanTest extends AbstractBeanTest {
+public class AppUserServiceTest extends AbstractBeanTest {
 
     private static IAppUserService appUserService;
-    private static IPostService postService;
     private static ConnectionHolder connectionHolder;
 
     @BeforeAll
@@ -38,7 +37,6 @@ public class ServiceBeanTest extends AbstractBeanTest {
 
         context = new AnnotationConfigApplicationContext(BeanConfiguration.class, ServiceBeanConfiguration.class, ConstantBeanConfiguration.class);
         appUserService = context.getBean("appUserService", IAppUserService.class);
-        postService = context.getBean("postService", IPostService.class);
     }
 
     @AfterAll
@@ -65,21 +63,4 @@ public class ServiceBeanTest extends AbstractBeanTest {
         appUserService.createNewUser(registrationAppUserDto, RoleEnum.ROLE_USER);
     }
 
-    @Test
-    @DataSet(cleanAfter = true)
-    void postService() {
-        Post postParent = new Post();
-        postParent.setParent(null);
-        postParent.setAuthorEmail("parent@mail.com");
-        postParent.setAuthorName("parentAuthor");
-        postParent.setMessage("parent message1");
-
-        PostDto postDto = new PostDto();
-        postDto.setEmail("post@mail.com");
-        postDto.setName("middleAuthor");
-        postDto.setMessage("some message2");
-        postDto.setParentPost(postParent);
-
-        postService.createNewPost(postDto);
-    }
 }

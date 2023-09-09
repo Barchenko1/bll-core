@@ -71,6 +71,11 @@ public abstract class AbstractBeanTest {
                 String.format(SELECT_BY_PARAM, table, paramName, paramValue));
     }
 
+    protected Object getEntityTest(IEntityDao entityDao, String table, String paramName, Long paramValue) {
+        return entityDao.getEntityBySQLQuery(
+                String.format("SELECT * FROM %s e JOIN where e.%s = '%s'", table, paramName, paramValue));
+    }
+
     protected <T> void cleanDbByDao(IEntityDao entityDao, String query) {
         List<T> firstOrganizationList = entityDao.getEntityListBySQLQuery(query);
         if (!firstOrganizationList.isEmpty()) {

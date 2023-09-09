@@ -98,6 +98,8 @@ import com.cos.core.dao.user.IUserDetailDao;
 import com.cos.core.dao.user.IUserPaymentDao;
 import com.cos.core.dao.user.IUserRoleDao;
 import com.cos.core.dao.viewed.IViewedDao;
+import com.cos.core.dto.BasicDtoEntityDao;
+import com.cos.core.dto.IDtoEntityDao;
 import com.cos.core.transaction.BasicTransactionManager;
 import com.cos.core.transaction.ITransactionManager;
 import org.hibernate.SessionFactory;
@@ -154,12 +156,10 @@ public class BeanConfiguration {
     }
 
     //dto bean example
-//    @Bean
-//    public IDtoEntityDao dtoEntityDao(SessionFactory sessionFactory) {
-//        IDtoEntityDao dtoEntityDao = new BasicDtoEntityDao(sessionFactory);
-//        dtoEntityDao.setClazz();
-//        return dtoEntityDao;
-//    }
+    @Bean
+    public IDtoEntityDao dtoEntityDao(SessionFactory sessionFactory) {
+        return new BasicDtoEntityDao(sessionFactory);
+    }
 
     @Bean
     public ITenantConfigDao tenantConfigurationDao(SessionFactory tenantSessionFactory) {

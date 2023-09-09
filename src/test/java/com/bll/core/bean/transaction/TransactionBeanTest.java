@@ -75,9 +75,8 @@ public class TransactionBeanTest extends AbstractBeanTest {
         cleanDbByDao(organizationDao, getQuery("org"));
         cleanDbByDao(tenantConfigDao, getQuery("tenant_configuration"));
 
-        List<?> list = Arrays.asList(organization, orgUser, tenant, tenantConfiguration);
-
-        transactionManager.useTransaction(list);
+        transactionManager.useTransaction(tenant);
+        transactionManager.useTransaction(orgUser);
         Assertions.assertFalse(isTableEmpty(organizationDao, getQuery("org")));
 
 

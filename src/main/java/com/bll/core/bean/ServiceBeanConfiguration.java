@@ -1,20 +1,20 @@
 package com.bll.core.bean;
 
-import com.bll.core.mapper.DtoEntityMapper;
-import com.bll.core.mapper.IDtoEntityBind;
-import com.bll.core.mapper.DtoEntityBind;
 import com.bll.core.service.appuser.AppUserService;
 import com.bll.core.service.appuser.IAppUserService;
 import com.bll.core.service.post.IPostService;
 import com.bll.core.service.post.PostService;
 import com.bll.core.service.product.IProductService;
 import com.bll.core.service.product.ProductService;
-import com.bll.core.mapper.IDtoEntityMapper;
 import com.core.im.tenant.modal.user.UserRole;
 import com.cos.core.dao.post.IPostDao;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.dao.user.IUserDetailDao;
 import com.cos.core.dto.IDtoEntityDao;
+import com.cos.core.mapper.DtoEntityBind;
+import com.cos.core.mapper.DtoEntityMapper;
+import com.cos.core.mapper.IDtoEntityBind;
+import com.cos.core.mapper.IDtoEntityMapper;
 import com.cos.core.transaction.ITransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,13 +25,13 @@ import java.util.Map;
 public class ServiceBeanConfiguration {
 
     @Bean
-    public IDtoEntityBind jsonDtoBindMapper() {
-        return new DtoEntityBind();
+    public IDtoEntityBind dtoEntityBind() {
+        return new DtoEntityBind("bind");
     }
 
     @Bean
-    public IDtoEntityMapper dtoEntityMapper(IDtoEntityBind jsonDtoBindMapper) {
-        return new DtoEntityMapper(jsonDtoBindMapper);
+    public IDtoEntityMapper dtoEntityMapper(IDtoEntityBind dtoEntityBind) {
+        return new DtoEntityMapper(dtoEntityBind);
     }
 
     @Bean

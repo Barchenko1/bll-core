@@ -1,6 +1,5 @@
 package com.bll.core.service.appuser;
 
-import com.bll.core.mapper.IDtoEntityMapper;
 import com.core.im.tenant.constant.RoleEnum;
 import com.core.im.tenant.dto.request.post.RegistrationAppUserDto;
 import com.core.im.tenant.dto.request.put.UpdateUserDetailDto;
@@ -11,6 +10,7 @@ import com.core.im.tenant.modal.user.UserPayment;
 import com.core.im.tenant.modal.user.UserRole;
 import com.cos.core.dao.user.IAppUserDao;
 import com.cos.core.dao.user.IUserDetailDao;
+import com.cos.core.mapper.IDtoEntityMapper;
 import com.cos.core.transaction.ITransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,9 +1,9 @@
 package com.bll.core.service.product;
 
-import com.bll.core.mapper.IDtoEntityMapper;
 import com.core.im.tenant.constant.RoleEnum;
 import com.core.im.tenant.dto.request.post.CreateProductDto;
 import com.core.im.tenant.modal.user.UserRole;
+import com.cos.core.mapper.IDtoEntityMapper;
 import com.cos.core.transaction.ITransactionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

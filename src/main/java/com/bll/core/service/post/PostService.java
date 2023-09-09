@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PostService implements IPostService {
 
@@ -40,22 +38,16 @@ public class PostService implements IPostService {
 
     @Override
     public void updatePost(PostDto postDto) {
-        Post currentPost = new Post();
-        dtoEntityMapper.mapDtoToEntity(postDto, currentPost, "postDtoBind");
+        Post post = dtoEntityDao.getDto("SELECT * FROM POST p where p.id='" + postDto.getPostId() +"'", Post.class);
+        dtoEntityMapper.mapDtoToEntity(postDto, post, "postDtoBind");
 
-        clientTransactionManager.useTransaction(currentPost);
+        clientTransactionManager.useTransaction(post);
     }
 
     @Override
     public void deletePost(PostDto postDto) {
         Post post = dtoEntityDao.getDto("SELECT * FROM POST p where p.id='" + postDto.getPostId() +"'", Post.class);
         postDao.deleteEntity(post);
-    }
-
-    @Override
-    public void createNewPost(Post post) {
-//        dtoEntityMapper.mapDtoToEntity(postDto, newPost, "postDtoBind");
-        clientTransactionManager.useTransaction(post);
     }
 
 

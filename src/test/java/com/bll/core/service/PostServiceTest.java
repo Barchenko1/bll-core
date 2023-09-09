@@ -84,9 +84,9 @@ public class PostServiceTest extends AbstractBeanTest {
         TestUtil.prepareTestEntityDb(dataSource, DatabaseOperation.CLEAN_INSERT, "/data/constant/initPostDataSet.xml");
 
         PostDto postDto = new PostDto();
-        postDto.setEmail("post@mail.com");
-        postDto.setName("middleAuthor");
-        postDto.setMessage("some message2");
+        postDto.setEmail("postUpdated@mail.com");
+        postDto.setName("middleUpdatedAuthor");
+        postDto.setMessage("some message Updated");
         postDto.setPostId(101L);
 
         postService.updatePost(postDto);

@@ -7,5 +7,4 @@ public interface IPostService {
     void createNewPost(PostDto postDto);
     void updatePost(PostDto postDto);
     void deletePost(PostDto postDto);
-    void createNewPost(Post post);
 }

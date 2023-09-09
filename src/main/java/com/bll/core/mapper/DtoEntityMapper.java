@@ -12,8 +12,8 @@ public class DtoEntityMapper implements IDtoEntityMapper {
 
     private final IDtoEntityBind iDtoEntityBind;
 
-    public DtoEntityMapper(IDtoEntityBind jsonDtoBindMapper) {
-        this.iDtoEntityBind = jsonDtoBindMapper;
+    public DtoEntityMapper(IDtoEntityBind iDtoEntityBind) {
+        this.iDtoEntityBind = iDtoEntityBind;
     }
 
     @Override

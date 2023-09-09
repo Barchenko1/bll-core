@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DtoEntityBind implements IDtoEntityBind {
-
-    private static final String folderPath = "bind";
     private final Gson gson = new Gson();
     private final Map<String, JsonObject> jsonObjectMap;
     private String key;
@@ -26,7 +24,7 @@ public class DtoEntityBind implements IDtoEntityBind {
     }
 
     private Map<String, JsonObject> initJsonMap() {
-        URL url = Thread.currentThread().getContextClassLoader().getResource("bind");
+        URL url = Thread.currentThread().getContextClassLoader().getResource(getFolderPath());
         File folder;
         try {
             folder = new File(url.toURI());
@@ -50,6 +48,11 @@ public class DtoEntityBind implements IDtoEntityBind {
             }
         }
         return map;
+    }
+
+    @Override
+    public String getFolderPath() {
+        return "bind";
     }
 
     @Override
